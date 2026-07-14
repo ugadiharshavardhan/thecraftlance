@@ -50,7 +50,7 @@ export default function Preloader({ onComplete }) {
               Loading
             </span>
             <span className="text-sm font-bold text-white tracking-widest">
-              GROWHALE
+              THE CRAFT LANCE
             </span>
           </motion.div>
 

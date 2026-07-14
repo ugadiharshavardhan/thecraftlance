@@ -43,16 +43,16 @@ export default function CTA() {
 
         <FadeUp delay={0.1}>
           <h2
-            className="font-bold text-black leading-none mb-3"
+            className="font-display font-medium text-[#111] leading-none mb-3"
             style={{ fontSize: "clamp(2.8rem, 8vw, 8rem)" }}
           >
-            Let's build something
+            Let&apos;s build something
           </h2>
         </FadeUp>
 
         <FadeUp delay={0.18}>
           <h2
-            className="font-bold text-zinc-300 leading-none mb-14"
+            className="font-display font-medium text-[#CCC] leading-none mb-14"
             style={{ fontSize: "clamp(2.8rem, 8vw, 8rem)" }}
           >
             unforgettable.
@@ -69,16 +69,16 @@ export default function CTA() {
         <FadeUp delay={0.36}>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-5">
             <a
-              href="mailto:hello@growhale.com"
-              className="px-10 py-4 bg-black text-white text-xs font-bold tracking-[0.15em] uppercase hover:bg-zinc-800 transition-colors"
+              href="mailto:hello@thecraftlance.com"
+              className="px-8 py-3.5 rounded-full text-xs font-bold tracking-[0.12em] uppercase bg-[#111] text-white hover:bg-[#2a2a2a] transition-colors"
             >
               Start Your Project
             </a>
             <a
-              href="mailto:hello@growhale.com"
-              className="text-sm text-zinc-400 hover:text-black transition-colors tracking-wide"
+              href="mailto:hello@thecraftlance.com"
+              className="text-sm text-[#888] hover:text-[#111] transition-colors tracking-wide"
             >
-              hello@growhale.com
+              hello@thecraftlance.com
             </a>
           </div>
         </FadeUp>

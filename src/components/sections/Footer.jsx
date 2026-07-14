@@ -1,57 +1,100 @@
 "use client";
 
-const LINKS = {
-  Work: ["Portfolio", "Case Studies", "Process"],
-  Services: ["Web Development", "UI/UX Design", "Branding", "AI Tools"],
-  Company: ["About", "Careers", "Contact"],
-};
+const RESOURCES = [
+  { label: "Projects", href: "/#work" },
+  { label: "Process", href: "/#process" },
+  { label: "Pricing", href: "/pricing" },
+];
+
+const COMPANY = [
+  { label: "About", href: "/#about" },
+  { label: "Careers", href: "/#contact" },
+  { label: "Services", href: "/#services" },
+];
+
+const CONNECT = [
+  { label: "Instagram", href: "#" },
+  { label: "LinkedIn", href: "#" },
+  { label: "hello@thecraftlance.com", href: "mailto:hello@thecraftlance.com" },
+];
+
+function Dot() {
+  return (
+    <span className="inline-block w-1.5 h-1.5 md:w-2 md:h-2 rounded-full bg-[#F5F2ED] align-middle ml-1 mb-0.5" />
+  );
+}
 
 export default function Footer() {
   return (
-    <footer className="bg-zinc-950 border-t border-zinc-900 px-6 py-16 md:py-20">
-      <div className="max-w-7xl mx-auto">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-10 md:gap-16 mb-16">
-          {/* Brand */}
-          <div className="col-span-2 md:col-span-1">
-            <div className="text-white font-bold text-sm tracking-[0.2em] uppercase mb-4">
-              GroWhale
-            </div>
-            <p className="text-zinc-600 text-sm leading-relaxed max-w-[200px]">
-              We craft digital experiences that grow businesses. Premium.
-              Intentional. Unforgettable.
-            </p>
+    <footer
+      id="contact"
+      className="bg-white h-svh min-h-svh max-h-svh px-3 sm:px-4 md:px-5 py-3 md:py-4 flex"
+    >
+      <div className="bg-[#141414] text-[#F5F2ED] rounded-[24px] md:rounded-[32px] px-5 md:px-10 lg:px-12 py-8 md:py-10 h-full w-full overflow-hidden flex flex-col justify-between min-h-0">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-6 shrink-0">
+          <div className="lg:col-span-5">
+            <h2 className="font-display text-[clamp(1.75rem,3.8vw,3rem)] font-medium leading-[1.15] tracking-tight max-w-md mb-5">
+              Let&apos;s Turn Your Idea Into Reality
+              <Dot />
+            </h2>
+            <a
+              href="mailto:hello@thecraftlance.com"
+              className="inline-flex items-center gap-2 text-sm text-[#F5F2ED]/80 hover:text-white transition-colors"
+            >
+              Get started
+              <span aria-hidden="true">↗</span>
+            </a>
           </div>
 
-          {/* Link groups */}
-          {Object.entries(LINKS).map(([group, items]) => (
-            <div key={group}>
-              <div className="text-[10px] text-zinc-700 tracking-[0.25em] uppercase mb-5">
-                {group}
+          <div className="lg:col-span-7 grid grid-cols-3 gap-4 md:gap-6">
+            {[
+              ["Company", COMPANY],
+              ["Resources", RESOURCES],
+              ["Connect", CONNECT],
+            ].map(([title, items]) => (
+              <div key={title}>
+                <p className="text-[9px] tracking-[0.28em] uppercase text-[#F5F2ED]/35 mb-3">
+                  {title}
+                </p>
+                <ul className="space-y-2">
+                  {items.map((l) => (
+                    <li key={l.label}>
+                      <a
+                        href={l.href}
+                        className="text-xs md:text-sm text-[#F5F2ED]/75 hover:text-white transition-colors break-all"
+                      >
+                        {l.label}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
               </div>
-              <ul className="flex flex-col gap-3">
-                {items.map((item) => (
-                  <li key={item}>
-                    <a
-                      href="#"
-                      className="text-zinc-500 text-sm hover:text-white transition-colors"
-                    >
-                      {item}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
 
-        {/* Bottom bar */}
-        <div className="border-t border-zinc-900 pt-8 flex flex-col sm:flex-row items-center justify-between gap-3">
-          <span className="text-zinc-700 text-xs">
-            © 2024 GroWhale. All rights reserved.
-          </span>
-          <span className="text-zinc-800 text-xs tracking-wide">
-            Made with intention.
-          </span>
+        <div className="border-t border-white/10 mt-auto pt-5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 shrink-0">
+          <p className="text-[11px] text-[#F5F2ED]/35">
+            © 2026 The Craft Lance. All rights reserved.
+          </p>
+          <div className="flex items-center gap-4">
+            {["Privacy", "Terms", "Cookies"].map((item) => (
+              <a
+                key={item}
+                href="#"
+                className="text-[11px] text-[#F5F2ED]/35 hover:text-[#F5F2ED]/70 transition-colors"
+              >
+                {item}
+              </a>
+            ))}
+          </div>
+        </div>
+
+        <div className="pt-6 md:pt-8 overflow-hidden shrink-0">
+          <p className="font-display font-medium text-[#F5F2ED] leading-[0.88] tracking-[-0.03em] text-[clamp(2.25rem,11vw,7.5rem)] whitespace-nowrap">
+            THE CRAFT LANCE
+            <Dot />
+          </p>
         </div>
       </div>
     </footer>

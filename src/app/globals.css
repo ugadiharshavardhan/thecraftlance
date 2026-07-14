@@ -1,13 +1,17 @@
 @import "tailwindcss";
 
 @theme {
-  --font-display: var(--font-jakarta);
+  --font-display: var(--font-fraunces), Georgia, serif;
   --font-body: var(--font-jakarta);
 }
 
 :root {
-  --background: #000000;
-  --foreground: #ffffff;
+  --background: #ffffff;
+  --foreground: #111111;
+  --surface: #f5f2ed;
+  --muted: #666666;
+  --accent: #111111;
+  --line: #e5e2dc;
 }
 
 html {
@@ -16,17 +20,21 @@ html {
 }
 
 body {
-  background: #000000;
-  color: #ffffff;
-  font-family: var(--font-jakarta), 'Plus Jakarta Sans', sans-serif;
+  background: #ffffff;
+  color: #111111;
+  font-family: var(--font-jakarta), "Plus Jakarta Sans", sans-serif;
   overflow-x: hidden;
   cursor: none;
 }
 
 @media (hover: none) and (pointer: coarse) {
-  body { cursor: auto; }
+  body {
+    cursor: auto;
+  }
   .cursor-dot,
-  .cursor-ring { display: none; }
+  .cursor-ring {
+    display: none;
+  }
 }
 
 /* ── Film grain overlay ─────────────────────────── */
@@ -38,26 +46,38 @@ body {
   height: 200%;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   background-size: 200px 200px;
-  opacity: 0.045;
+  opacity: 0.03;
   pointer-events: none;
   z-index: 9999;
   animation: noise-grain 0.5s steps(2) infinite;
 }
 
 @keyframes noise-grain {
-  0%   { transform: translate(0, 0); }
-  20%  { transform: translate(-4%, -5%); }
-  40%  { transform: translate(3%, 2%); }
-  60%  { transform: translate(-2%, 4%); }
-  80%  { transform: translate(4%, -3%); }
-  100% { transform: translate(0, 0); }
+  0% {
+    transform: translate(0, 0);
+  }
+  20% {
+    transform: translate(-4%, -5%);
+  }
+  40% {
+    transform: translate(3%, 2%);
+  }
+  60% {
+    transform: translate(-2%, 4%);
+  }
+  80% {
+    transform: translate(4%, -3%);
+  }
+  100% {
+    transform: translate(0, 0);
+  }
 }
 
 /* ── Custom cursor ──────────────────────────────── */
 .cursor-dot {
   width: 6px;
   height: 6px;
-  background: #ffffff;
+  background: #111111;
   border-radius: 50%;
   position: fixed;
   top: 0;
@@ -72,7 +92,7 @@ body {
 .cursor-ring {
   width: 36px;
   height: 36px;
-  border: 1px solid rgba(255, 255, 255, 0.35);
+  border: 1px solid rgba(17, 17, 17, 0.35);
   border-radius: 50%;
   position: fixed;
   top: 0;
@@ -92,18 +112,30 @@ body {
 .cursor-ring.hover {
   width: 60px;
   height: 60px;
-  border-color: rgba(255, 255, 255, 0.18);
+  border-color: rgba(17, 17, 17, 0.2);
 }
 
 /* ── Text selection ─────────────────────────────── */
 ::selection {
-  background: #ffffff;
-  color: #000000;
+  background: #111111;
+  color: #ffffff;
 }
 
 /* ── Hide scrollbar ─────────────────────────────── */
-::-webkit-scrollbar { display: none; }
+::-webkit-scrollbar {
+  display: none;
+}
 * {
   -ms-overflow-style: none;
   scrollbar-width: none;
+}
+
+@keyframes orb-breathe {
+  0%,
+  100% {
+    transform: scale(1) rotate(0deg);
+  }
+  50% {
+    transform: scale(1.04) rotate(8deg);
+  }
 }

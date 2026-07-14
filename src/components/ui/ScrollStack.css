@@ -1,0 +1,146 @@
+.scroll-stack-scroller {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: visible;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+  will-change: scroll-position;
+}
+
+.scroll-stack-scroller--window {
+  height: auto;
+  /* Must stay visible — clip chops pinned cards and squares off bottom radius */
+  overflow: visible;
+  overscroll-behavior: auto;
+  will-change: auto;
+  transform: none;
+  scroll-behavior: auto;
+}
+
+.scroll-stack-inner {
+  padding: 20vh 5rem 50rem;
+  min-height: 100vh;
+}
+
+.scroll-stack-scroller--window .scroll-stack-inner {
+  padding: 10vh 0 50rem;
+  min-height: 0;
+}
+
+.scroll-stack-scroller--window.projects-scroll-stack .scroll-stack-inner {
+  padding: 0 0 30vh;
+}
+
+.scroll-stack-scroller--window.services-scroll-stack .scroll-stack-inner {
+  padding: 2vh 0 18vh;
+}
+
+.scroll-stack-card-wrapper {
+  position: relative;
+}
+
+.scroll-stack-card {
+  transform-origin: top center;
+  will-change: transform, filter;
+  backface-visibility: hidden;
+  transform-style: preserve-3d;
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.1);
+  height: 20rem;
+  width: 100%;
+  margin: 30px 0;
+  padding: 3rem;
+  border-radius: 40px;
+  box-sizing: border-box;
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+  position: relative;
+}
+
+.scroll-stack-end {
+  width: 100%;
+  height: 1px;
+}
+
+.service-stack-card {
+  height: auto !important;
+  min-height: 16rem !important;
+  margin: 0 !important;
+  padding: 2rem 2.25rem !important;
+  border-radius: 40px 40px 40px 40px !important;
+  box-shadow: none !important;
+  border: 1px solid rgba(17, 17, 17, 0.06);
+  background: #f5f2ed;
+  overflow: hidden;
+  /* Keep 2D stacking so border-radius paints on all corners */
+  transform-style: flat;
+  -webkit-transform-style: flat;
+}
+
+.project-stack-card {
+  height: min(62vh, 480px) !important;
+  min-height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border-radius: 32px !important;
+  overflow: hidden;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.18) !important;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  background: transparent;
+}
+
+.project-stack-card-h {
+  height: auto !important;
+  min-height: 0 !important;
+  aspect-ratio: 16 / 9 !important;
+  width: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border-radius: 28px !important;
+  overflow: hidden;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.16) !important;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  background: transparent;
+}
+
+@media (max-width: 768px) {
+  .scroll-stack-inner {
+    padding: 12vh 1.25rem 40rem;
+  }
+
+  .scroll-stack-scroller--window .scroll-stack-inner {
+    padding: 6vh 0 40rem;
+  }
+
+  .scroll-stack-scroller--window.services-scroll-stack .scroll-stack-inner {
+    padding: 1vh 0 14vh;
+  }
+
+  .scroll-stack-card {
+    height: auto;
+    min-height: 18rem;
+    padding: 2rem;
+    border-radius: 28px;
+  }
+
+  .service-stack-card {
+    min-height: 18rem !important;
+    padding: 1.75rem !important;
+    border-radius: 28px !important;
+  }
+
+  .project-stack-card-h {
+    aspect-ratio: 4 / 3 !important;
+    border-radius: 22px !important;
+  }
+}
+
+@media (min-width: 768px) {
+  .service-stack-card {
+    min-height: 18rem !important;
+  }
+}
