@@ -1,79 +1,62 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
-import { motion } from "framer-motion";
+import { useEffect, useRef, useState } from "react";
+import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 const PROJECTS = [
   {
     id: 1,
-    name: "AudioSphere",
-    tag: "Hardware UI",
-    img: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1600&q=80",
+    name: "The Oh !",
+    tag: "Cloud Kitchen",
+    description: "Premium online cloud kitchen ordering platform with gourmet menu options.",
+    img: "https://theoh.in/theoh!.jpg",
+    link: "https://theoh.in/",
   },
   {
     id: 2,
-    name: "Nimbus",
-    tag: "SaaS Platform",
-    img: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1600&q=80",
+    name: "Rotomaker",
+    tag: "VFX Company",
+    description: "Global visual effects studio specializing in high-precision rotoscoping, paint, and prep work.",
+    img: "https://images.unsplash.com/photo-1536440136628-849c177e76a1?w=1600&q=80",
+    link: "https://rotomaker-rho.vercel.app/",
   },
   {
     id: 3,
-    name: "Vertex",
-    tag: "Brand Identity",
-    img: "https://images.unsplash.com/photo-1561070791-2526d30994b5?w=1600&q=80",
+    name: "Portfolio",
+    tag: "Developer Portfolio",
+    description: "Interactive personal portfolio showcasing modern web engineering, 3D graphics, and responsive design.",
+    img: "https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?w=1600&q=80",
+    link: "https://harshavardhanportfolio-beige.vercel.app/",
   },
   {
     id: 4,
     name: "Pulse",
     tag: "Mobile App",
+    description: "Real-time health tracking and analytics mobile application.",
     img: "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=1600&q=80",
+    link: "https://pulse.example.com",
   },
   {
     id: 5,
     name: "Oracle",
     tag: "AI Dashboard",
+    description: "Advanced prediction engine and market intelligence platform.",
     img: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1600&q=80",
+    link: "https://oracle.example.com",
   },
   {
     id: 6,
     name: "Harbor",
-    tag: "E-commerce",
+    tag: "E-Commerce",
+    description: "Modern headless e-commerce store with optimized checkout.",
     img: "https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=1600&q=80",
+    link: "https://harbor.example.com",
   },
 ];
 
 const COUNT = PROJECTS.length;
-const EXPANSION_DURATION = 1;
-const SCROLL_DURATION = COUNT * 0.8;
-const SPRING = { type: "spring", stiffness: 300, damping: 30 };
-
-function getRelativeDiff(index, currentIndex) {
-  let diff = index - currentIndex;
-  if (diff > COUNT / 2) diff -= COUNT;
-  if (diff < -COUNT / 2) diff += COUNT;
-  return diff;
-}
-
-function getStackPose(diff) {
-  if (diff === 0) {
-    return { y: 0, scale: 1, opacity: 1, zIndex: 5, rotateX: 0 };
-  }
-  if (diff === -1) {
-    return { y: -80, scale: 0.85, opacity: 0.7, zIndex: 4, rotateX: 8 };
-  }
-  if (diff === -2) {
-    return { y: -150, scale: 0.75, opacity: 0.4, zIndex: 3, rotateX: 15 };
-  }
-  if (diff === 1) {
-    return { y: 80, scale: 0.85, opacity: 0.7, zIndex: 4, rotateX: -8 };
-  }
-  if (diff === 2) {
-    return { y: 150, scale: 0.75, opacity: 0.4, zIndex: 3, rotateX: -15 };
-  }
-  return { y: diff < 0 ? -220 : 220, scale: 0.6, opacity: 0, zIndex: 1, rotateX: 0 };
-}
 
 function ArrowUpRightIcon({ className = "" }) {
   return (
@@ -117,8 +100,10 @@ function ChevronDownIcon({ className = "" }) {
 function ProjectCard({ project, active }) {
   return (
     <div
-      className={`relative h-full w-full overflow-hidden rounded-[2rem] ${
-        active ? "shadow-[0_30px_80px_rgba(0,0,0,0.55)]" : "shadow-[0_12px_40px_rgba(0,0,0,0.35)]"
+      className={`relative h-full w-full overflow-hidden rounded-[1.5rem] border border-white/10 transition-all duration-500 ${
+        active 
+          ? "shadow-[0_30px_100px_rgba(255,255,255,0.15)] ring-1 ring-white/30" 
+          : "shadow-[0_12px_40px_rgba(0,0,0,0.8)] filter brightness-[0.4]"
       }`}
     >
       {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -129,16 +114,10 @@ function ProjectCard({ project, active }) {
         draggable={false}
       />
       <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent" />
-      <div className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-4 p-6 md:p-8">
-        <div>
-          <p className="mb-2 text-xs font-medium uppercase tracking-[0.22em] text-orange-500">
-            {project.tag}
-          </p>
-          <h3 className="font-display text-3xl font-medium tracking-tight text-zinc-50 md:text-5xl">
-            {project.name}
-          </h3>
-        </div>
-        <span className="mb-1 flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-white/20 bg-white/10 text-zinc-50 backdrop-blur-md">
+      
+      {/* Link indicator on hover */}
+      <div className="absolute top-4 right-4 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+        <span className="flex h-9 w-9 items-center justify-center rounded-full border border-white/30 bg-black/60 text-zinc-50 backdrop-blur-sm">
           <ArrowUpRightIcon />
         </span>
       </div>
@@ -146,52 +125,76 @@ function ProjectCard({ project, active }) {
   );
 }
 
-function VerticalStack({ currentIndex }) {
-  const visible = useMemo(() => {
-    return PROJECTS.map((project, index) => {
-      const diff = getRelativeDiff(index, currentIndex);
-      return { project, index, diff, pose: getStackPose(diff) };
-    }).filter(({ diff }) => Math.abs(diff) <= 2);
-  }, [currentIndex]);
+// Separate component for the 3D card wrapper to strictly follow React hook rules
+function CarouselCard({ project, index, smoothProgress, dimensions, angleStep, active, onClick }) {
+  const theta = useTransform(smoothProgress, (p) => (index - p) * angleStep);
+  
+  const x = useTransform(theta, (t) => dimensions.radius * Math.sin(t));
+  const z = useTransform(theta, (t) => dimensions.radius * Math.cos(t) - dimensions.radius);
+  const rotateY = useTransform(theta, (t) => (t * 180) / Math.PI);
+  const opacity = useTransform(theta, (t) => {
+    const cos = Math.cos(t);
+    if (cos < -0.3) return 0;
+    return (cos + 0.3) / 1.3;
+  });
+  const scale = useTransform(theta, (t) => {
+    const cos = Math.cos(t);
+    return 0.75 + 0.25 * ((cos + 1) / 2);
+  });
+  const zIndex = useTransform(theta, (t) => Math.round((Math.cos(t) + 1) * 100));
 
   return (
-    <div
-      className="relative flex h-full w-full items-center justify-center"
-      style={{ perspective: "1200px", transformStyle: "preserve-3d" }}
+    <motion.div
+      className="group absolute cursor-pointer"
+      style={{
+        width: `${dimensions.cardW}px`,
+        height: `${dimensions.cardH}px`,
+        transformStyle: "preserve-3d",
+        backfaceVisibility: "hidden",
+        x,
+        z,
+        rotateY,
+        opacity,
+        scale,
+        zIndex,
+      }}
+      whileHover={{
+        scale: 1.05,
+        transition: { duration: 0.3 },
+      }}
+      onClick={onClick}
     >
-      <div className="relative h-[60vh] w-[85vw] md:w-[60vw]">
-        {visible.map(({ project, index, diff, pose }) => (
-          <motion.div
-            key={project.id}
-            className="absolute inset-0"
-            style={{ zIndex: pose.zIndex, transformStyle: "preserve-3d" }}
-            initial={false}
-            animate={{
-              y: pose.y,
-              scale: pose.scale,
-              opacity: pose.opacity,
-              rotateX: pose.rotateX,
-            }}
-            transition={SPRING}
-          >
-            <ProjectCard project={project} active={diff === 0} />
-          </motion.div>
-        ))}
-      </div>
-    </div>
+      <ProjectCard project={project} active={active} />
+    </motion.div>
   );
 }
 
 export default function Portfolio() {
   const sectionRef = useRef(null);
-  const productsRef = useRef(null);
-  const builtRef = useRef(null);
-  const bgRef = useRef(null);
-  const boxRef = useRef(null);
-  const overlayRef = useRef(null);
-  const uiRef = useRef(null);
-  const currentRef = useRef(0);
+  const containerRef = useRef(null);
+  const scrollTriggerInstance = useRef(null);
+  
+  // MotionValues for smooth scroll mapping without triggering React re-renders on scroll
+  const scrollProgress = useMotionValue(0);
+  const smoothProgress = useSpring(scrollProgress, {
+    stiffness: 80,
+    damping: 25,
+    mass: 0.5,
+  });
+
   const [currentProject, setCurrentProject] = useState(0);
+
+  useEffect(() => {
+    // Sync the active index state with the spring
+    const unsubscribe = smoothProgress.on("change", (latest) => {
+      const idx = Math.round(latest);
+      let normalizedIdx = idx % COUNT;
+      if (normalizedIdx < 0) normalizedIdx += COUNT;
+      setCurrentProject((prev) => (prev !== normalizedIdx ? normalizedIdx : prev));
+    });
+
+    return () => unsubscribe();
+  }, [smoothProgress]);
 
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger);
@@ -199,99 +202,28 @@ export default function Portfolio() {
     const section = sectionRef.current;
     if (!section) return;
 
-    const proxy = { index: 0 };
-    const totalPin = (EXPANSION_DURATION + SCROLL_DURATION) * 100;
+    const totalScrollHeight = COUNT * 150;
 
     const ctx = gsap.context(() => {
-      gsap.set(boxRef.current, {
-        width: "60vw",
-        height: "60vh",
-        borderRadius: "2rem",
-        xPercent: -50,
-        yPercent: -50,
-      });
-      gsap.set(overlayRef.current, { opacity: 0 });
-      gsap.set(uiRef.current, { opacity: 0 });
-
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: section,
-          start: "top top",
-          end: `+=${totalPin}%`,
-          pin: true,
-          scrub: 1,
-          invalidateOnRefresh: true,
+      scrollTriggerInstance.current = ScrollTrigger.create({
+        trigger: section,
+        start: "top top",
+        end: `+=${totalScrollHeight}%`,
+        pin: true,
+        scrub: 1,
+        invalidateOnRefresh: true,
+        onUpdate: (self) => {
+          // Map scroll progress to 0 -> COUNT - 1 directly on the MotionValue
+          const currentVal = self.progress * (COUNT - 1);
+          scrollProgress.set(currentVal);
         },
       });
-
-      // Phase A — expand
-      tl.to(
-        productsRef.current,
-        { xPercent: -150, opacity: 0, duration: EXPANSION_DURATION, ease: "none" },
-        0
-      )
-        .to(
-          builtRef.current,
-          { xPercent: 150, opacity: 0, duration: EXPANSION_DURATION, ease: "none" },
-          0
-        )
-        .to(
-          bgRef.current,
-          { opacity: 0, duration: EXPANSION_DURATION, ease: "none" },
-          0
-        )
-        .to(
-          boxRef.current,
-          {
-            width: "100vw",
-            height: "100vh",
-            borderRadius: "0px",
-            duration: EXPANSION_DURATION,
-            ease: "none",
-          },
-          0
-        )
-        .to(
-          overlayRef.current,
-          { opacity: 1, duration: EXPANSION_DURATION, ease: "none" },
-          0
-        )
-        .to(
-          uiRef.current,
-          { opacity: 1, duration: EXPANSION_DURATION * 0.6, ease: "none" },
-          EXPANSION_DURATION * 0.4
-        );
-
-      // Phase B — card stack driven by scroll
-      tl.to(
-        proxy,
-        {
-          index: COUNT - 1,
-          duration: SCROLL_DURATION,
-          ease: "none",
-          onUpdate: () => {
-            const next = Math.round(proxy.index);
-            if (next !== currentRef.current) {
-              currentRef.current = next;
-              setCurrentProject(next);
-            }
-          },
-        },
-        EXPANSION_DURATION
-      );
     }, section);
 
     const refresh = () => ScrollTrigger.refresh();
     const onLenisScroll = () => ScrollTrigger.update();
     let boundLenis = null;
     let onLenisReady = null;
-
-    const bindLenis = (lenis) => {
-      if (!lenis || boundLenis) return;
-      boundLenis = lenis;
-      lenis.on("scroll", onLenisScroll);
-      requestAnimationFrame(refresh);
-    };
 
     if (window.__lenis) {
       bindLenis(window.__lenis);
@@ -306,118 +238,148 @@ export default function Portfolio() {
       window.addEventListener("lenis:ready", onLenisReady);
     }
 
+    function bindLenis(lenis) {
+      if (!lenis || boundLenis) return;
+      boundLenis = lenis;
+      lenis.on("scroll", onLenisScroll);
+      requestAnimationFrame(refresh);
+    }
+
     window.addEventListener("load", refresh);
-    const t = window.setTimeout(refresh, 200);
+    const t = setTimeout(refresh, 200);
 
     return () => {
-      window.clearTimeout(t);
+      clearTimeout(t);
       window.removeEventListener("load", refresh);
       if (onLenisReady) window.removeEventListener("lenis:ready", onLenisReady);
       if (boundLenis) boundLenis.off("scroll", onLenisScroll);
       ctx.revert();
     };
-  }, []);
+  }, [scrollProgress]);
 
-  const counter = String(currentProject + 1).padStart(2, "0");
+  // Compute 3D variables dynamically
+  const [dimensions, setDimensions] = useState({ radius: 450, cardW: 280, cardH: 380 });
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth < 768) {
+        setDimensions({ radius: 240, cardW: 180, cardH: 260 });
+      } else if (window.innerWidth < 1024) {
+        setDimensions({ radius: 360, cardW: 240, cardH: 340 });
+      } else {
+        setDimensions({ radius: 480, cardW: 280, cardH: 380 });
+      }
+    };
+
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   return (
     <section
       id="work"
       ref={sectionRef}
-      className="relative h-svh w-full overflow-hidden bg-neutral-950 text-zinc-50"
+      className="relative h-svh w-full overflow-hidden bg-black text-zinc-50"
     >
-      {/* Collapsed-state atmosphere */}
-      <div ref={bgRef} className="pointer-events-none absolute inset-0 z-0">
+      {/* White Grid Lines Background - Solid with rows & columns */}
+      <div
+        className="absolute inset-0 pointer-events-none z-0"
+        style={{
+          backgroundImage: `
+            linear-gradient(to right, rgba(255, 255, 255, 0.15) 1px, transparent 1px),
+            linear-gradient(to bottom, rgba(255, 255, 255, 0.15) 1px, transparent 1px)
+          `,
+          backgroundSize: "60px 60px",
+          backgroundPosition: "center center",
+        }}
+      />
+      {/* Radial vignette fade for grid lines */}
+      <div 
+        className="absolute inset-0 pointer-events-none z-0 bg-transparent"
+        style={{
+          background: "radial-gradient(circle at center, transparent 20%, black 90%)"
+        }}
+      />
+
+      {/* Header Info - Left Aligned and Renamed to "Our Work" */}
+      <div className="absolute top-12 left-6 md:left-14 z-30 pointer-events-none">
+        <span className="text-[10px] font-semibold uppercase tracking-[0.3em] text-orange-500">
+          Selected Projects
+        </span>
+        <h2 className="mt-2 font-display text-4xl font-semibold tracking-tight text-white md:text-5xl">
+          Our Work
+        </h2>
+      </div>
+
+      {/* 3D Stage Container */}
+      <div
+        ref={containerRef}
+        className="relative z-10 flex h-full w-full items-center justify-center overflow-hidden"
+        style={{ perspective: "1500px" }}
+      >
         <div
-          className="absolute inset-0 bg-cover bg-center opacity-40"
+          className="relative flex items-center justify-center"
           style={{
-            backgroundImage:
-              "url(https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=1800&q=80)",
+            transformStyle: "preserve-3d",
+            width: `${dimensions.cardW}px`,
+            height: `${dimensions.cardH}px`,
           }}
-        />
-        <div className="absolute inset-0 bg-neutral-950/50" />
-      </div>
-
-      {/* Split title */}
-      <div className="pointer-events-none absolute inset-0 z-30 flex items-center justify-between px-4 sm:px-8 md:px-14">
-        <h2
-          ref={productsRef}
-          className="font-display text-[clamp(2.4rem,10vw,7rem)] font-medium leading-none tracking-tight text-zinc-50 mix-blend-difference"
         >
-          Products
-        </h2>
-        <h2
-          ref={builtRef}
-          className="font-display text-[clamp(2.4rem,10vw,7rem)] font-medium leading-none tracking-tight text-zinc-50 mix-blend-difference"
-        >
-          Built
-        </h2>
-      </div>
-
-      {/* Expanding card stage */}
-      <div
-        ref={boxRef}
-        className="absolute left-1/2 top-1/2 z-20 overflow-hidden bg-neutral-950"
-        style={{ width: "60vw", height: "60vh", borderRadius: "2rem" }}
-      >
-        <div
-          ref={overlayRef}
-          className="pointer-events-none absolute inset-0 z-10 bg-neutral-950/80 backdrop-blur-md"
-        />
-        <div className="relative z-20 h-full w-full">
-          <VerticalStack currentIndex={currentProject} />
-        </div>
-      </div>
-
-      {/* Navigation UI */}
-      <div
-        ref={uiRef}
-        className="pointer-events-none absolute inset-0 z-40 opacity-0"
-      >
-        {/* Counter */}
-        <div className="absolute left-6 top-1/2 hidden -translate-y-1/2 md:block">
-          <div className="flex flex-col items-center gap-3">
-            <span className="font-mono text-sm tracking-[0.2em] text-zinc-50">
-              {counter}
-            </span>
-            <span className="h-12 w-px bg-white/30" />
-            <span className="font-mono text-sm tracking-[0.2em] text-white/40">
-              {String(COUNT).padStart(2, "0")}
-            </span>
-          </div>
-        </div>
-
-        {/* Progress dots */}
-        <div className="absolute right-5 top-1/2 flex -translate-y-1/2 flex-col items-center gap-2 sm:right-8">
           {PROJECTS.map((project, index) => {
-            const active = index === currentProject;
+            const angleStep = (2 * Math.PI) / COUNT;
+
             return (
-              <motion.span
+              <CarouselCard
                 key={project.id}
-                className="w-1.5 rounded-full bg-zinc-50"
-                animate={{
-                  height: active ? 32 : 8,
-                  opacity: active ? 1 : 0.35,
+                project={project}
+                index={index}
+                smoothProgress={smoothProgress}
+                dimensions={dimensions}
+                angleStep={angleStep}
+                active={currentProject === index}
+                onClick={() => {
+                  if (project.link) {
+                    window.open(project.link, "_blank", "noopener,noreferrer");
+                  }
                 }}
-                transition={SPRING}
               />
             );
           })}
         </div>
+      </div>
 
-        {/* Keep scrolling */}
-        <div className="absolute bottom-8 left-1/2 flex -translate-x-1/2 flex-col items-center gap-2">
-          <span className="text-[10px] uppercase tracking-[0.28em] text-white/55">
-            Keep scrolling
+      {/* Footer Info displaying current project name, tag & description */}
+      <div className="absolute bottom-16 inset-x-0 z-30 text-center pointer-events-none">
+        <motion.div
+          key={currentProject}
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -10 }}
+          transition={{ duration: 0.4 }}
+          className="flex flex-col items-center gap-1 px-4"
+        >
+          <span className="font-mono text-xs tracking-[0.25em] text-orange-500 font-semibold uppercase">
+            {PROJECTS[currentProject].tag}
           </span>
-          <motion.span
-            animate={{ y: [0, 6, 0] }}
-            transition={{ duration: 1.4, repeat: Infinity, ease: "easeInOut" }}
-            className="text-white/70"
-          >
-            <ChevronDownIcon />
-          </motion.span>
-        </div>
+          <h3 className="font-display text-2xl font-bold tracking-tight text-white md:text-3xl">
+            {PROJECTS[currentProject].name}
+          </h3>
+          <p className="max-w-xl text-sm text-zinc-400 mt-1 truncate whitespace-nowrap overflow-hidden">
+            {PROJECTS[currentProject].description}
+          </p>
+        </motion.div>
+      </div>
+
+      {/* Scroll indicator */}
+      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-30 flex flex-col items-center gap-1 pointer-events-none">
+        <motion.span
+          animate={{ y: [0, 5, 0] }}
+          transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+          className="text-white/40"
+        >
+          <ChevronDownIcon />
+        </motion.span>
       </div>
     </section>
   );

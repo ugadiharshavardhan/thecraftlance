@@ -5,9 +5,9 @@ import PillNav from "@/components/ui/PillNav";
 
 const NAV_ITEMS = [
   { label: "Home", href: "/" },
+  { label: "About", href: "/#about" },
   { label: "Projects", href: "/#work" },
   { label: "Services", href: "/#services" },
-  { label: "About", href: "/#about" },
   { label: "Pricing", href: "/pricing" },
 ];
 
