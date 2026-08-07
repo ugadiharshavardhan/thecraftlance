@@ -3,19 +3,18 @@
 const RESOURCES = [
   { label: "Projects", href: "/#work" },
   { label: "Process", href: "/#process" },
-  { label: "Pricing", href: "/pricing" },
+  { label: "Contact", href: "/contact" },
 ];
 
 const COMPANY = [
   { label: "About", href: "/#about" },
-  { label: "Careers", href: "/#contact" },
   { label: "Services", href: "/#services" },
 ];
 
 const CONNECT = [
-  { label: "Instagram", href: "#" },
-  { label: "LinkedIn", href: "#" },
-  { label: "hello@thecraftlance.com", href: "mailto:hello@thecraftlance.com" },
+  { label: "Instagram", href: "https://www.instagram.com/thecraftlance/" },
+  { label: "LinkedIn", href: "" },
+  { label: "thecraftlance@gmail.com", href: "mailto:thecraftlance@gmail.com" },
 ];
 
 function Dot() {
@@ -38,7 +37,7 @@ export default function Footer() {
               <Dot />
             </h2>
             <a
-              href="mailto:hello@thecraftlance.com"
+              href="mailto:thecraftlance@gmail.com"
               className="inline-flex items-center gap-2 text-sm text-[#F5F2ED]/80 hover:text-white transition-colors"
             >
               Get started
@@ -78,15 +77,18 @@ export default function Footer() {
             © 2026 The Craft Lance. All rights reserved.
           </p>
           <div className="flex items-center gap-4">
-            {["Privacy", "Terms", "Cookies"].map((item) => (
-              <a
-                key={item}
-                href="#"
-                className="text-[11px] text-[#F5F2ED]/35 hover:text-[#F5F2ED]/70 transition-colors"
-              >
-                {item}
-              </a>
-            ))}
+            <a
+              href="/privacy"
+              className="text-[11px] text-[#F5F2ED]/35 hover:text-[#F5F2ED]/70 transition-colors"
+            >
+              Privacy
+            </a>
+            <a
+              href="/terms"
+              className="text-[11px] text-[#F5F2ED]/35 hover:text-[#F5F2ED]/70 transition-colors"
+            >
+              Terms
+            </a>
           </div>
         </div>
 

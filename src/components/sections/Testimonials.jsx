@@ -6,45 +6,24 @@ import { motion, useInView } from "framer-motion";
 const TESTIMONIALS = [
   {
     quote:
-      "The Craft Lance didn't just build our platform — they transformed how we think about our digital presence. The result exceeded every expectation.",
-    author: "Sarah Chen",
-    role: "CEO, Luminary Tech",
-    initials: "SC",
+      "The Craft Lance built an amazing online ordering system for our cloud kitchen, The OH !. The user experience is extremely smooth, ordering is fast, and our customer retention has scaled up significantly since launch.",
+    author: "The OH !",
+    role: "Business, Hyderabad",
+    initials: "TO",
   },
   {
     quote:
-      "Working with The Craft Lance felt like having a world-class in-house team. They understood our vision before we could fully articulate it.",
-    author: "Marcus Reeves",
-    role: "Founder, Vertex Capital",
-    initials: "MR",
+      "As a global VFX studio, we needed a high-performance website that reflects our design standards. The Craft Lance delivered a premium portfolio showcase that displays our rotoscoping and paint work flawlessly.",
+    author: "Rotomaker",
+    role: "VFX Company, Hyderabad",
+    initials: "RM",
   },
   {
     quote:
-      "The attention to detail is extraordinary. Every interaction feels intentional. Our conversion rate doubled in three months.",
-    author: "Priya Nair",
-    role: "CMO, Pulse Health",
-    initials: "PN",
-  },
-  {
-    quote:
-      "Their structured process made a highly complex project feel simple and stress-free. The launch was flawless and our users love the UI.",
-    author: "Alex Mercer",
-    role: "CTO, Skynet AI",
-    initials: "AM",
-  },
-  {
-    quote:
-      "Highly professional team that delivers outstanding results. They streamlined our brand positioning and built a site that scales perfectly.",
-    author: "Elena Rostova",
-    role: "Product Director, Aura Living",
-    initials: "ER",
-  },
-  {
-    quote:
-      "The Craft Lance is our go-to partner for creative designs and high-performance frontends. Their dedication to quality is unmatched.",
-    author: "David Vance",
-    role: "Operations Head, Horizon Media",
-    initials: "DV",
+      "The Craft Lance's digital mentorship and design guidelines helped me build a state-of-the-art developer portfolio. Their focus on clean code and custom animations is outstanding.",
+    author: "Harsha",
+    role: "Student, Hyderabad",
+    initials: "H",
   },
 ];
 

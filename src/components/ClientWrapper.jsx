@@ -16,6 +16,7 @@ import Services from "@/components/sections/Services";
 import Process from "@/components/sections/Process";
 import Portfolio from "@/components/sections/Portfolio";
 import Testimonials from "@/components/sections/Testimonials";
+import Contact from "@/components/sections/Contact";
 import Footer from "@/components/sections/Footer";
 
 export default function ClientWrapper() {

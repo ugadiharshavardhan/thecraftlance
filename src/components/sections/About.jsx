@@ -59,36 +59,7 @@ export default function About() {
           </FadeUp>
         </div>
  
-        <div className="flex flex-col gap-12">
-          <FadeUp delay={0.15}>
-            <div className="relative aspect-[4/3] bg-zinc-900/40 border border-white/10 overflow-hidden rounded-[28px]">
-              <div className="absolute inset-0 flex items-center justify-center">
-                <motion.div
-                  animate={{ rotate: 360 }}
-                  transition={{ duration: 32, repeat: Infinity, ease: "linear" }}
-                  className="w-52 h-52 border border-white/10 rounded-full"
-                />
-                <motion.div
-                  animate={{ rotate: -360 }}
-                  transition={{ duration: 22, repeat: Infinity, ease: "linear" }}
-                  className="absolute w-32 h-32 border border-white/5 rounded-full"
-                />
-                <motion.div
-                  animate={{ scale: [1, 1.15, 1] }}
-                  transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-                  className="absolute w-3 h-3 rounded-full bg-white"
-                />
-                <motion.div
-                  animate={{ rotate: 360 }}
-                  transition={{ duration: 12, repeat: Infinity, ease: "linear" }}
-                  className="absolute w-52 h-52"
-                >
-                  <div className="absolute top-0 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full bg-white" />
-                </motion.div>
-              </div>
-            </div>
-          </FadeUp>
- 
+        <div className="flex flex-col justify-center">
           <div className="grid grid-cols-3 gap-4">
             {STATS.map((s, i) => (
               <FadeUp key={i} delay={0.25 + i * 0.08}>

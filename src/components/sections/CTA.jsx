@@ -69,16 +69,16 @@ export default function CTA() {
         <FadeUp delay={0.36}>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-5">
             <a
-              href="mailto:hello@thecraftlance.com"
+              href="mailto:thecraftlance@gmail.com"
               className="px-8 py-3.5 rounded-full text-xs font-bold tracking-[0.12em] uppercase bg-[#111] text-white hover:bg-[#2a2a2a] transition-colors"
             >
               Start Your Project
             </a>
             <a
-              href="mailto:hello@thecraftlance.com"
+              href="mailto:thecraftlance@gmail.com"
               className="text-sm text-[#888] hover:text-[#111] transition-colors tracking-wide"
             >
-              hello@thecraftlance.com
+              thecraftlance@gmail.com
             </a>
           </div>
         </FadeUp>

@@ -4,11 +4,12 @@ import { useEffect, useRef, useState } from "react";
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import OptionWheel from "@/components/ui/OptionWheel";
 
 const PROJECTS = [
   {
     id: 1,
-    name: "The Oh !",
+    name: "The OH !",
     tag: "Cloud Kitchen",
     description: "Premium online cloud kitchen ordering platform with gourmet menu options.",
     img: "https://theoh.in/theoh!.jpg",
@@ -32,28 +33,20 @@ const PROJECTS = [
   },
   {
     id: 4,
-    name: "Pulse",
-    tag: "Mobile App",
-    description: "Real-time health tracking and analytics mobile application.",
-    img: "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=1600&q=80",
-    link: "https://pulse.example.com",
+    name: "Call Agent",
+    tag: "AI Voice Automation",
+    description: "Intelligent automated voice calling system and customer service workflow agent.",
+    img: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=1600&q=80",
+    link: "https://voice-call-automation.vercel.app/",
   },
   {
     id: 5,
-    name: "Oracle",
+    name: "Hostipal Dashboard",
     tag: "AI Dashboard",
     description: "Advanced prediction engine and market intelligence platform.",
-    img: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1600&q=80",
-    link: "https://oracle.example.com",
-  },
-  {
-    id: 6,
-    name: "Harbor",
-    tag: "E-Commerce",
-    description: "Modern headless e-commerce store with optimized checkout.",
-    img: "https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=1600&q=80",
-    link: "https://harbor.example.com",
-  },
+    img: "https://user-images.githubusercontent.com/97469459/233842844-10f7d76d-c2d5-46bb-a413-1875b5771230.jpg",
+    link: "hospital-app-black-mu.vercel.app",
+  }
 ];
 
 const COUNT = PROJECTS.length;
@@ -183,6 +176,23 @@ export default function Portfolio() {
   });
 
   const [currentProject, setCurrentProject] = useState(0);
+
+  const scrollToProject = (index) => {
+    if (!scrollTriggerInstance.current) return;
+    const st = scrollTriggerInstance.current;
+    const start = st.start;
+    const end = st.end;
+    const total = end - start;
+    const targetScroll = start + (index / (COUNT - 1)) * total;
+
+    if (st.scroll) {
+      st.scroll(targetScroll);
+    } else if (window.__lenis) {
+      window.__lenis.scrollTo(targetScroll, { duration: 1.2 });
+    } else {
+      window.scrollTo({ top: targetScroll, behavior: "smooth" });
+    }
+  };
 
   useEffect(() => {
     // Sync the active index state with the spring
@@ -349,7 +359,31 @@ export default function Portfolio() {
         </div>
       </div>
 
-      {/* Footer Info displaying current project name, tag & description */}
+      {/* Option Wheel on the left side of the screen */}
+      <div className="absolute left-6 md:left-14 top-1/2 -translate-y-1/2 w-80 md:w-96 h-[320px] md:h-[450px] z-30 flex items-center justify-start pointer-events-auto select-none">
+        <OptionWheel
+          items={PROJECTS.map((p) => p.name)}
+          selected={currentProject}
+          textColor="#666666"
+          activeColor="#ffffff"
+          side="left"
+          fontSize={2.25}
+          spacing={1.6}
+          curve={1}
+          tilt={8}
+          blur={1.5}
+          fade={0.35}
+          smoothing={300}
+          inset={20}
+          loop={false}
+          draggable
+          onChange={(index) => {
+            scrollToProject(index);
+          }}
+        />
+      </div>
+
+      {/* Footer Info displaying current project tag & description (Title removed as it is shown on the OptionWheel) */}
       <div className="absolute bottom-16 inset-x-0 z-30 text-center pointer-events-none">
         <motion.div
           key={currentProject}
@@ -360,13 +394,10 @@ export default function Portfolio() {
           className="flex flex-col items-center gap-1 px-4"
         >
           <span className="font-mono text-xs tracking-[0.25em] text-orange-500 font-semibold uppercase">
-            {PROJECTS[currentProject].tag}
+            {PROJECTS[currentProject]?.tag}
           </span>
-          <h3 className="font-display text-2xl font-bold tracking-tight text-white md:text-3xl">
-            {PROJECTS[currentProject].name}
-          </h3>
           <p className="max-w-xl text-sm text-zinc-400 mt-1 truncate whitespace-nowrap overflow-hidden">
-            {PROJECTS[currentProject].description}
+            {PROJECTS[currentProject]?.description}
           </p>
         </motion.div>
       </div>

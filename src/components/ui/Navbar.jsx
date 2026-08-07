@@ -8,13 +8,12 @@ const NAV_ITEMS = [
   { label: "About", href: "/#about" },
   { label: "Projects", href: "/#work" },
   { label: "Services", href: "/#services" },
-  { label: "Pricing", href: "/pricing" },
+  { label: "Contact", href: "/contact" },
 ];
 
 export default function Navbar() {
   const pathname = usePathname();
-  // Only highlight Pricing — never show the Home active dot
-  const activeHref = pathname === "/pricing" ? "/pricing" : undefined;
+  const activeHref = undefined;
 
   return (
     <PillNav

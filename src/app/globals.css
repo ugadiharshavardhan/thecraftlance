@@ -6,22 +6,23 @@
 }
 
 :root {
-  --background: #ffffff;
-  --foreground: #111111;
-  --surface: #f5f2ed;
-  --muted: #666666;
-  --accent: #111111;
-  --line: #e5e2dc;
+  --background: #000000;
+  --foreground: #ffffff;
+  --surface: #111111;
+  --muted: #a1a1aa;
+  --accent: #f97316;
+  --line: #27272a;
 }
 
 html {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background: #000000;
 }
 
 body {
-  background: #ffffff;
-  color: #111111;
+  background: #000000;
+  color: #ffffff;
   font-family: var(--font-jakarta), "Plus Jakarta Sans", sans-serif;
   overflow-x: hidden;
   cursor: none;
@@ -140,4 +141,152 @@ body {
   50% {
     transform: scale(1.04) rotate(8deg);
   }
+}
+
+/* ── Light Mode Styles ────────────────────────────── */
+.light-theme,
+.light-theme body,
+.light-theme section,
+.light-theme main {
+  background-color: #ffffff !important;
+  color: #111111 !important;
+}
+
+.light-theme h1,
+.light-theme h2,
+.light-theme h3,
+.light-theme h4,
+.light-theme h5,
+.light-theme h6 {
+  color: #000000 !important;
+}
+
+.light-theme p,
+.light-theme li,
+.light-theme span {
+  color: #3f3f46 !important;
+}
+
+/* Specific work section grid line overrides in light mode */
+.light-theme #work {
+  background-color: #ffffff !important;
+}
+.light-theme #work .absolute:not(.option-wheel) {
+  background-image: 
+    linear-gradient(to right, rgba(0, 0, 0, 0.12) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(0, 0, 0, 0.12) 1px, transparent 1px) !important;
+}
+
+/* OptionWheel styling overrides in light mode */
+.light-theme .option-wheel {
+  --ow-text-color: #888888 !important;
+  --ow-active-color: #000000 !important;
+}
+.light-theme .option-wheel__item {
+  color: color-mix(in srgb, var(--ow-active-color) calc(var(--ow-p, 0) * 100%), var(--ow-text-color)) !important;
+}
+
+/* Services card overrides in light theme */
+.light-theme #services .font-black.text-white {
+  color: #000000 !important;
+  opacity: 0.15 !important;
+}
+.light-theme #services .font-black.text-white span {
+  color: #000000 !important;
+}
+
+/* Force services card content to remain white/high-contrast in light mode */
+.light-theme #services .sticky * {
+  color: #ffffff !important;
+}
+.light-theme #services .sticky text.fill-white,
+.light-theme #services .sticky .fill-white {
+  fill: #ffffff !important;
+}
+.light-theme #services .sticky .text-zinc-300,
+.light-theme #services .sticky .text-zinc-400 {
+  color: #d4d4d8 !important;
+}
+.light-theme #services .sticky .bg-black\/60 {
+  background-color: rgba(0, 0, 0, 0.6) !important;
+  border-color: rgba(255, 255, 255, 0.1) !important;
+}
+.light-theme #services .sticky .bg-black\/60 * {
+  color: #d4d4d8 !important;
+}
+.light-theme #services .sticky .bg-black\/60 span {
+  background-color: #f97316 !important;
+}
+
+/* Force Hero section content to remain bright white/high-contrast in all themes */
+.light-theme #home * {
+  color: #ffffff !important;
+}
+.light-theme #home .text-zinc-300,
+.light-theme #home .text-zinc-400,
+.light-theme #home p {
+  color: #d4d4d8 !important;
+}
+.light-theme #home .border-white\/10 {
+  border-color: rgba(255, 255, 255, 0.1) !important;
+}
+.light-theme #home a.bg-white {
+  background-color: #ffffff !important;
+  color: #000000 !important;
+}
+.light-theme #home a.bg-white * {
+  color: #000000 !important;
+}
+.light-theme #home .scroll-expand__title {
+  color: #ffffff !important;
+}
+
+/* General classes overrides */
+.light-theme .bg-zinc-900\/60,
+.light-theme .bg-zinc-900\/90,
+.light-theme .bg-zinc-950\/40,
+.light-theme .bg-zinc-950\/60,
+.light-theme .bg-black\/60,
+.light-theme .bg-zinc-900 {
+  background-color: rgba(244, 244, 245, 0.9) !important;
+  border-color: rgba(0, 0, 0, 0.1) !important;
+}
+
+.light-theme .border-white\/10 {
+  border-color: rgba(0, 0, 0, 0.1) !important;
+}
+
+.light-theme .text-zinc-300,
+.light-theme .text-zinc-400,
+.light-theme .text-white\/80 {
+  color: #4b5563 !important;
+}
+
+.light-theme .text-white {
+  color: #111111 !important;
+}
+
+.light-theme text.fill-white {
+  fill: #000000 !important;
+}
+
+.light-theme .bg-white {
+  background-color: #111111 !important;
+  color: #ffffff !important;
+}
+
+.light-theme .text-black {
+  color: #ffffff !important;
+}
+
+.light-theme .hover-circle {
+  background-color: rgba(0, 0, 0, 0.05) !important;
+}
+
+.light-theme .cursor-ring {
+  border-color: rgba(0, 0, 0, 0.3) !important;
+}
+
+.light-theme .cursor-dot {
+  background-color: #000000 !important;
 }

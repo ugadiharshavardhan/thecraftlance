@@ -172,7 +172,7 @@ export default function Pricing() {
                 </ul>
 
                 <a
-                  href={`mailto:hello@thecraftlance.com?subject=${encodeURIComponent(
+                  href={`mailto:thecraftlance@gmail.com?subject=${encodeURIComponent(
                     `Inquiry about ${plan.name} plan`
                   )}`}
                   className={`inline-flex justify-center px-5 py-3 text-xs font-semibold tracking-wide uppercase transition-colors rounded-full ${
