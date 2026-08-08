@@ -4,7 +4,7 @@ import { useRef } from "react";
 import { motion, useInView } from "framer-motion";
 
 const STATS = [
-  { value: "50+", label: "Projects Delivered" },
+  { value: "4", label: "Projects Delivered" },
   { value: "98%", label: "Client Satisfaction" },
   { value: "5×", label: "Average ROI" },
 ];
@@ -31,8 +31,8 @@ export default function About() {
       id="about"
       className="relative bg-black py-32 md:py-44 px-6 border-t border-white/10"
     >
-      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-16 md:gap-28 items-center">
-        <div>
+      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-16 md:gap-x-28 md:gap-y-12 items-center">
+        <div className="order-2 md:order-1 md:row-span-2">
           <FadeUp>
             <span className="text-[10px] text-orange-500 tracking-[0.35em] uppercase mb-6 block">
               Our Philosophy
@@ -59,7 +59,19 @@ export default function About() {
           </FadeUp>
         </div>
  
-        <div className="flex flex-col justify-center">
+        <div className="order-1 md:order-2 flex items-center justify-center">
+          <FadeUp delay={0.2} className="w-full">
+            <div className="relative w-full max-w-md mx-auto aspect-[16/9] md:aspect-square flex items-center justify-center">
+              <img 
+                src="/thecraftlancelogo.png" 
+                alt="The Craft Lance" 
+                className="w-full h-auto object-contain opacity-90 drop-shadow-2xl"
+              />
+            </div>
+          </FadeUp>
+        </div>
+
+        <div className="order-3 md:order-3 md:col-start-2">
           <div className="grid grid-cols-3 gap-4">
             {STATS.map((s, i) => (
               <FadeUp key={i} delay={0.25 + i * 0.08}>

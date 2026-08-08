@@ -21,6 +21,9 @@ export const metadata = {
     "We design, engineer, and launch web services that transform innovative ideas into scalable products.",
   keywords:
     "digital agency, web development, UI/UX design, branding, AI solutions",
+  icons: {
+    icon: "/logo.png",
+  },
 };
 
 export default function RootLayout({ children }) {

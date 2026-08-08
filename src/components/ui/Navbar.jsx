@@ -17,7 +17,7 @@ export default function Navbar() {
 
   return (
     <PillNav
-      logo="/logo.svg"
+      logo="/logo.png"
       logoAlt="The Craft Lance"
       items={NAV_ITEMS}
       activeHref={activeHref}
