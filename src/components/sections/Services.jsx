@@ -183,10 +183,10 @@ function ServiceCard({ svc, index }) {
         {/* White blocky scrolling text path */}
         <svg viewBox="0 0 1000 200" className="w-full overflow-visible h-28 md:h-38">
           <path id={`curve-white-${index}`} d="M 0,100 C 250,30 750,170 1000,100" fill="none" stroke="none" />
-          <text className="font-display font-extrabold text-[4.5rem] md:text-[6.5rem] fill-white uppercase tracking-tight opacity-90">
+          <text className="font-display font-extrabold text-[3rem] md:text-[6.5rem] fill-white uppercase tracking-tight opacity-90">
             <motion.textPath
               href={`#curve-white-${index}`}
-              startOffset="0%"
+              initial={{ startOffset: "0%" }}
               animate={isActive ? { startOffset: ["0%", "-50%"] } : { startOffset: "0%" }}
               transition={whiteTransition}
             >
@@ -199,10 +199,10 @@ function ServiceCard({ svc, index }) {
         <div className="relative -mt-14 md:-mt-20">
           <svg viewBox="0 0 1000 200" className="w-full overflow-visible h-28 md:h-38">
             <path id={`curve-red-${index}`} d="M 0,120 C 250,50 750,190 1000,120" fill="none" stroke="none" />
-            <text className="font-serif italic font-medium text-[3.2rem] md:text-[4.5rem] fill-orange-500 opacity-95">
+            <text className="font-serif italic font-medium text-[2.2rem] md:text-[4.5rem] fill-orange-500 opacity-95">
               <motion.textPath
                 href={`#curve-red-${index}`}
-                startOffset="-50%"
+                initial={{ startOffset: "-50%" }}
                 animate={isActive ? { startOffset: ["-50%", "0%"] } : { startOffset: "-50%" }}
                 transition={redTransition}
               >
@@ -249,15 +249,14 @@ export default function Services() {
           <span className="text-[10px] text-orange-500 tracking-[0.35em] uppercase font-bold mb-4 block text-center md:text-left w-full">
             What We Do
           </span>
-          <div className="flex flex-row md:flex-col items-center justify-center md:justify-start gap-2.5 md:gap-4 font-display text-[1.4rem] md:text-[2.2rem] lg:text-[2.8rem] font-black text-white leading-none uppercase opacity-20 w-full pt-1 md:pt-4">
+          <div className="flex flex-row md:flex-col items-center justify-center md:justify-start gap-2.5 sm:gap-3 md:gap-4 font-display text-[1.75rem] sm:text-[2rem] md:text-[2.2rem] lg:text-[2.8rem] font-black text-white leading-none uppercase opacity-20 w-full pt-1 md:pt-4">
             {"SERVICES".split("").map((char, index) => (
-              <span key={index} className="transition-all duration-300 hover:opacity-100 hover:text-orange-500 scale-x-[1.8] inline-block origin-center md:origin-left">
+              <span key={index} className="transition-all duration-300 hover:opacity-100 hover:text-orange-500 scale-x-[1.3] md:scale-x-[1.8] inline-block origin-center md:origin-left">
                 {char}
               </span>
             ))}
           </div>
         </div>
-
         {/* Styled Service Cards stack */}
         <div className="flex-1 max-w-5xl pt-16 md:pt-28">
           <div className="relative space-y-12">

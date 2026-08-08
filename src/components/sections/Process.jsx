@@ -159,7 +159,7 @@ export default function Process() {
         </div>
 
         {/* Staggered steps cards list */}
-        <div className="relative z-10 space-y-36">
+        <div className="relative z-10 space-y-32 md:space-y-36">
           {STEPS.map((step, index) => {
             const isEven = index % 2 !== 0;
             const isActive = activeStep === index;
@@ -171,16 +171,16 @@ export default function Process() {
               >
                 <div className="w-full md:w-[48%] flex gap-6 md:gap-8 items-start relative">
                   {/* Step Large Background Number */}
-                  <span className="step-number font-display text-8xl md:text-9xl font-bold text-zinc-900 leading-none select-none transition-colors duration-500">
+                  <span className="step-number font-display text-6xl sm:text-7xl md:text-9xl font-bold text-zinc-900 leading-none select-none transition-colors duration-500">
                     {step.num}
                   </span>
 
                   {/* Step Details */}
                   <div className="flex-1 relative">
-                    <h3 className="text-2xl md:text-3xl font-bold text-white mb-4 tracking-tight">
+                    <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-white mb-3 md:mb-4 tracking-tight">
                       {step.title}
                     </h3>
-                    <p className="text-zinc-400 text-sm md:text-base leading-relaxed max-w-md">
+                    <p className="text-zinc-400 text-xs sm:text-sm md:text-base leading-relaxed max-w-md">
                       {step.desc}
                     </p>
 
@@ -192,7 +192,7 @@ export default function Process() {
                           animate={{ opacity: 1, scale: 1, y: 0 }}
                           exit={{ opacity: 0, scale: 0.8, y: 15 }}
                           transition={{ duration: 0.4, ease: "easeOut" }}
-                          className="absolute top-full left-0 mt-6 w-56 h-40 md:w-64 md:h-48 overflow-hidden rounded-2xl border border-white/20 shadow-[0_20px_50px_rgba(132,204,22,0.15)] z-20 pointer-events-none"
+                          className="absolute top-full left-0 mt-4 md:mt-6 w-36 h-24 sm:w-48 sm:h-32 md:w-64 md:h-48 overflow-hidden rounded-xl md:rounded-2xl border border-white/20 shadow-[0_20px_50px_rgba(132,204,22,0.15)] z-20 pointer-events-none"
                         >
                           {/* eslint-disable-next-line @next/next/no-img-element */}
                           <img

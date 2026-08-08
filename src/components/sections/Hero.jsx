@@ -10,7 +10,7 @@ export default function Hero() {
     <section id="home" className="relative w-full bg-black">
       <ScrollExpand
         src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=1600&q=80"
-        title="THE CRAFT LANCE"
+        title={<>THE CRAFT<br className="md:hidden" /> LANCE</>}
         scrollHint="SCROLL TO EXPLORE"
         useWindowScroll
         startWidth={48}
@@ -49,10 +49,10 @@ export default function Hero() {
               </a>
             </motion.div>
 
-            <div className="h1-placeholder font-bold text-white uppercase tracking-[-0.04em] leading-[0.92] text-[clamp(2.6rem,7.5vw,5.75rem)] mb-6 opacity-0 pointer-events-none select-none">
-              The Craft
-              <br />
-              Lance
+            <div className="h1-placeholder font-bold text-white uppercase tracking-normal leading-[0.92] text-[clamp(2.6rem,7.5vw,5.75rem)] mb-6 opacity-0 pointer-events-none select-none">
+              THE CRAFT
+              <br className="md:hidden" />
+              LANCE
             </div>
 
             <motion.h2

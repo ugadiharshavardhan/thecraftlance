@@ -283,10 +283,29 @@ body {
   background-color: rgba(0, 0, 0, 0.05) !important;
 }
 
-.light-theme .cursor-ring {
-  border-color: rgba(0, 0, 0, 0.3) !important;
-}
 
-.light-theme .cursor-dot {
-  background-color: #000000 !important;
+
+/* Footer overrides for light mode */
+.light-theme footer#contact.bg-white {
+  background-color: #ffffff !important;
+}
+.light-theme footer#contact .bg-\[\#141414\] {
+  background-color: #f4f4f5 !important;
+  color: #111111 !important;
+}
+.light-theme footer#contact .text-\[\#F5F2ED\] {
+  color: #111111 !important;
+}
+.light-theme footer#contact .text-\[\#F5F2ED\]\/35 {
+  color: rgba(17, 17, 17, 0.4) !important;
+}
+.light-theme footer#contact .text-\[\#F5F2ED\]\/75,
+.light-theme footer#contact .text-\[\#F5F2ED\]\/80 {
+  color: rgba(17, 17, 17, 0.8) !important;
+}
+.light-theme footer#contact .bg-\[\#F5F2ED\] {
+  background-color: #111111 !important;
+}
+.light-theme footer#contact .border-white\/10 {
+  border-color: rgba(0, 0, 0, 0.1) !important;
 }

@@ -133,11 +133,19 @@ const ScrollExpand = ({
 
       const titleEl = titleRef.current;
       if (titleEl) {
+        // Temporarily remove transform to measure true unscaled dimensions
+        const oldTransform = titleEl.style.transform;
+        titleEl.style.transform = 'none';
+
         const titleRect = titleEl.getBoundingClientRect();
         const titleW = titleRect.width;
         const titleH = titleRect.height;
-        const startX = (w - titleW) / 2;
-        const startY = (stageH - titleH) / 2;
+        
+        // At e=0, the text is scaled by 1.22. To perfectly center it visually,
+        // we must offset the top-left coordinate to account for the scaled dimensions.
+        const scaleAtZero = 1.22;
+        const startX = (w / 2) - ((titleW * scaleAtZero) / 2);
+        const startY = (stageH / 2) - ((titleH * scaleAtZero) / 2);
 
         const placeholder = root.querySelector('.h1-placeholder');
         if (placeholder) {
@@ -153,6 +161,9 @@ const ScrollExpand = ({
         } else {
           coordsRef.current.hasPlaceholder = false;
         }
+        
+        // Restore transform
+        titleEl.style.transform = oldTransform;
       }
     };
 

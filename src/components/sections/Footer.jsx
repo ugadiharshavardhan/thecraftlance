@@ -14,7 +14,7 @@ const COMPANY = [
 const CONNECT = [
   { label: "Instagram", href: "https://www.instagram.com/thecraftlance/" },
   { label: "LinkedIn", href: "" },
-  { label: "thecraftlance@gmail.com", href: "mailto:thecraftlance@gmail.com" },
+  { label: "thecraftlance@gmail.com", href: "https://mail.google.com/mail/?view=cm&fs=1&to=thecraftlance@gmail.com" },
 ];
 
 function Dot() {
@@ -27,7 +27,7 @@ export default function Footer() {
   return (
     <footer
       id="contact"
-      className="bg-white h-svh min-h-svh max-h-svh px-3 sm:px-4 md:px-5 py-3 md:py-4 flex"
+      className="bg-white h-[65svh] min-h-[450px] md:h-svh md:min-h-svh md:max-h-svh px-3 sm:px-4 md:px-5 py-3 md:py-4 flex"
     >
       <div className="bg-[#141414] text-[#F5F2ED] rounded-[24px] md:rounded-[32px] px-5 md:px-10 lg:px-12 py-8 md:py-10 h-full w-full overflow-hidden flex flex-col justify-between min-h-0">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-6 shrink-0">

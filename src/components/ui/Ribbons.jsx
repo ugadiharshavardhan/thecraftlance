@@ -205,11 +205,29 @@ const Ribbons = ({
     }
     update();
 
+    const onOver = (e) => {
+      if (e.target.closest("a, button, [data-hover]")) {
+        if (gl.canvas) gl.canvas.style.opacity = '0';
+      }
+    };
+    const onOut = (e) => {
+      if (e.target.closest("a, button, [data-hover]")) {
+        if (gl.canvas) gl.canvas.style.opacity = '1';
+      }
+    };
+    window.addEventListener('mouseover', onOver);
+    window.addEventListener('mouseout', onOut);
+    
+    // Add transition to canvas for smooth fading
+    gl.canvas.style.transition = 'opacity 0.3s ease-out';
+
     return () => {
       window.removeEventListener('resize', resize);
       window.removeEventListener('mousemove', updateMouse);
       window.removeEventListener('touchstart', updateMouse);
       window.removeEventListener('touchmove', updateMouse);
+      window.removeEventListener('mouseover', onOver);
+      window.removeEventListener('mouseout', onOut);
       cancelAnimationFrame(frameId);
       if (gl.canvas && gl.canvas.parentNode === container) {
         container.removeChild(gl.canvas);

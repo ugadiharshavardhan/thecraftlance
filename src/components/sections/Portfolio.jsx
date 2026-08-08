@@ -359,8 +359,8 @@ export default function Portfolio() {
         </div>
       </div>
 
-      {/* Option Wheel on the left side of the screen */}
-      <div className="absolute left-6 md:left-14 top-1/2 -translate-y-1/2 w-80 md:w-96 h-[320px] md:h-[450px] z-30 flex items-center justify-start pointer-events-auto select-none">
+      {/* OptionWheel on the left side of the screen - hidden on mobile/tablet */}
+      <div className="absolute left-6 md:left-14 top-1/2 -translate-y-1/2 w-80 md:w-96 h-[320px] md:h-[450px] z-30 hidden lg:flex items-center justify-start pointer-events-auto select-none">
         <OptionWheel
           items={PROJECTS.map((p) => p.name)}
           selected={currentProject}
@@ -383,7 +383,7 @@ export default function Portfolio() {
         />
       </div>
 
-      {/* Footer Info displaying current project tag & description (Title removed as it is shown on the OptionWheel) */}
+      {/* Footer Info displaying current project tag & description */}
       <div className="absolute bottom-16 inset-x-0 z-30 text-center pointer-events-none">
         <motion.div
           key={currentProject}
@@ -393,10 +393,13 @@ export default function Portfolio() {
           transition={{ duration: 0.4 }}
           className="flex flex-col items-center gap-1 px-4"
         >
-          <span className="font-mono text-xs tracking-[0.25em] text-orange-500 font-semibold uppercase">
+          <span className="font-mono text-xs tracking-[0.25em] text-orange-500 font-semibold uppercase mb-1">
             {PROJECTS[currentProject]?.tag}
           </span>
-          <p className="max-w-xl text-sm text-zinc-400 mt-1 truncate whitespace-nowrap overflow-hidden">
+          <h3 className="text-2xl sm:text-3xl font-display font-semibold text-white lg:hidden">
+            {PROJECTS[currentProject]?.name}
+          </h3>
+          <p className="max-w-xl mx-auto text-sm sm:text-base text-zinc-400 mt-2 px-4 leading-relaxed">
             {PROJECTS[currentProject]?.description}
           </p>
         </motion.div>
