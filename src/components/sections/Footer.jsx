@@ -1,5 +1,7 @@
 "use client";
 
+import Link from "next/link";
+
 const RESOURCES = [
   { label: "Projects", href: "/#work" },
   { label: "Process", href: "/#process" },
@@ -36,13 +38,13 @@ export default function Footer() {
               Let&apos;s Turn Your Idea Into Reality
               <Dot />
             </h2>
-            <a
-              href="mailto:thecraftlance@gmail.com"
-              className="inline-flex items-center gap-2 text-sm text-[#F5F2ED]/80 hover:text-white transition-colors"
+            <Link
+              href="/contact"
+              className="group relative inline-flex justify-center items-center gap-2 mt-2 px-6 py-3.5 text-xs font-bold tracking-wider uppercase transition-all duration-300 rounded-full bg-gradient-to-r from-white to-zinc-200 text-black shadow-[0_0_20px_rgba(255,255,255,0.15)] hover:shadow-[0_0_25px_rgba(255,255,255,0.25)] hover:scale-105"
             >
-              Get started
-              <span aria-hidden="true">↗</span>
-            </a>
+              <span>Get started</span>
+              <span aria-hidden="true" className="transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5">↗</span>
+            </Link>
           </div>
 
           <div className="lg:col-span-7 grid grid-cols-3 gap-4 md:gap-6">

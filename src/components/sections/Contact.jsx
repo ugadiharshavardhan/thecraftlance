@@ -1,10 +1,48 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { useState } from "react";
 
 export default function Contact() {
   const [projectType, setProjectType] = useState("Website Development");
+  const [isLoading, setIsLoading] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const [errorMsg, setErrorMsg] = useState("");
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setIsLoading(true);
+    setErrorMsg("");
+
+    const formData = new FormData(e.target);
+    const data = {
+      name: formData.get("name"),
+      email: formData.get("email"),
+      project_type: formData.get("project_type"),
+      message: formData.get("message"),
+    };
+
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+
+      if (response.ok) {
+        setShowModal(true);
+        e.target.reset();
+        setProjectType("Website Development");
+      } else {
+        const resData = await response.json();
+        setErrorMsg(resData.error || "Something went wrong.");
+      }
+    } catch (error) {
+      setErrorMsg("Failed to send message. Please try again later.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <section id="contact-section" className="relative z-10 bg-black text-white py-28 px-6 md:px-14 border-t border-white/10">
@@ -63,7 +101,7 @@ export default function Contact() {
 
         {/* Right Column Form */}
         <div className="lg:col-span-7 rounded-3xl bg-zinc-900/40 border border-white/10 p-6 md:p-10">
-          <form action="https://formspree.io/f/xaewnpgz" method="POST" className="space-y-6">
+          <form onSubmit={handleSubmit} className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="flex flex-col gap-2">
                 <label htmlFor="name" className="text-[10px] uppercase tracking-wider text-zinc-400">Your Name</label>
@@ -123,16 +161,67 @@ export default function Contact() {
               />
             </div>
 
+            {errorMsg && (
+              <p className="text-red-500 text-sm mt-2">{errorMsg}</p>
+            )}
             <button
               type="submit"
-              className="w-full bg-white hover:bg-orange-500 text-black font-semibold text-sm py-4 rounded-xl transition-colors duration-300 cursor-pointer"
+              disabled={isLoading}
+              className="w-full bg-white hover:bg-orange-500 text-black font-semibold text-sm py-4 rounded-xl transition-colors duration-300 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed flex justify-center items-center gap-2"
             >
-              Send Message
+              {isLoading ? (
+                <>
+                  <svg className="animate-spin h-5 w-5 text-black" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                  </svg>
+                  Sending...
+                </>
+              ) : (
+                "Send Message"
+              )}
             </button>
           </form>
         </div>
 
       </div>
+
+      {/* Success Modal */}
+      <AnimatePresence>
+        {showModal && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setShowModal(false)}
+              className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+            />
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 20 }}
+              className="relative bg-zinc-900 border border-white/10 p-8 md:p-10 rounded-3xl max-w-md w-full text-center shadow-2xl z-10"
+            >
+              <div className="w-16 h-16 bg-green-500/10 rounded-full flex items-center justify-center mx-auto mb-6">
+                <svg className="w-8 h-8 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                </svg>
+              </div>
+              <h3 className="text-2xl font-display font-medium text-white mb-3">Thank You!</h3>
+              <p className="text-zinc-400 text-sm leading-relaxed mb-8">
+                Your message has been successfully sent. We will get back to you within 24 hours. A confirmation email has been sent to your inbox.
+              </p>
+              <button
+                onClick={() => setShowModal(false)}
+                className="w-full bg-white text-black font-semibold text-sm py-3.5 rounded-xl hover:bg-orange-500 transition-colors duration-300"
+              >
+                Close
+              </button>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
     </section>
   );
 }

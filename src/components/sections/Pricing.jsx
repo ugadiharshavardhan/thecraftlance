@@ -2,6 +2,7 @@
 
 import { useRef } from "react";
 import { motion, useInView } from "framer-motion";
+import Link from "next/link";
 
 const PLANS = [
   {
@@ -171,18 +172,19 @@ export default function Pricing() {
                   ))}
                 </ul>
 
-                <a
-                  href={`mailto:thecraftlance@gmail.com?subject=${encodeURIComponent(
-                    `Inquiry about ${plan.name} plan`
-                  )}`}
-                  className={`inline-flex justify-center px-5 py-3 text-xs font-semibold tracking-wide uppercase transition-colors rounded-full ${
+                <Link
+                  href="/contact"
+                  className={`group relative inline-flex justify-center items-center gap-2 px-6 py-3.5 text-xs font-bold tracking-wider uppercase transition-all duration-300 rounded-full ${
                     plan.featured
-                      ? "bg-white text-black hover:bg-zinc-200"
-                      : "bg-[#111] text-white hover:bg-[#2a2a2a]"
+                      ? "bg-gradient-to-r from-white to-zinc-200 text-black shadow-[0_0_20px_rgba(255,255,255,0.15)] hover:shadow-[0_0_25px_rgba(255,255,255,0.25)] hover:scale-105"
+                      : "bg-gradient-to-r from-zinc-900 to-black text-white shadow-[0_4px_14px_0_rgb(0,0,0,10%)] hover:shadow-[0_6px_20px_rgba(0,0,0,0.15)] hover:scale-105 border border-zinc-800"
                   }`}
                 >
-                  Get started
-                </a>
+                  <span>Get started</span>
+                  <svg className="w-3.5 h-3.5 transition-transform duration-300 group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                  </svg>
+                </Link>
               </article>
             </FadeUp>
           ))}

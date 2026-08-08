@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import Link from "next/link";
 import ScrollExpand from "@/components/ui/ScrollExpand";
 
 const TRUSTED = ["Rotomaker", "The OH!"];
@@ -81,13 +82,13 @@ export default function Hero() {
               transition={{ duration: 0.7, delay: 0.4, ease: [0.16, 1, 0.3, 1] }}
               className="flex flex-wrap items-center gap-4"
             >
-              <a
+              <Link
                 href="/contact"
-                className="inline-flex items-center gap-2 px-7 py-3.5 rounded-full bg-white text-black text-sm font-medium hover:bg-zinc-200 transition-colors"
+                className="group relative inline-flex justify-center items-center gap-2 px-7 py-3.5 text-sm font-bold tracking-wide transition-all duration-300 rounded-full bg-gradient-to-r from-white to-zinc-200 text-black shadow-[0_0_20px_rgba(255,255,255,0.15)] hover:shadow-[0_0_25px_rgba(255,255,255,0.25)] hover:scale-105"
               >
-                Start a project
-                <span aria-hidden="true">→</span>
-              </a>
+                <span>Start a project</span>
+                <span aria-hidden="true" className="transition-transform duration-300 group-hover:translate-x-1">→</span>
+              </Link>
               <a
                 href="#work"
                 className="text-sm text-zinc-400 hover:text-white transition-colors"
