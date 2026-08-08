@@ -18,6 +18,7 @@ export default function Contact() {
     const data = {
       name: formData.get("name"),
       email: formData.get("email"),
+      mobile: formData.get("mobile"),
       project_type: formData.get("project_type"),
       message: formData.get("message"),
     };
@@ -121,10 +122,28 @@ export default function Contact() {
                   name="email"
                   id="email"
                   required
+                  pattern="[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}"
+                  title="Please enter a valid email address with an @ symbol"
                   placeholder="john@example.com"
                   className="w-full bg-zinc-950/60 border border-white/10 rounded-xl px-4 py-3 text-sm text-white placeholder-zinc-600 focus:outline-none focus:border-orange-500 transition-colors"
                 />
               </div>
+            </div>
+
+            <div className="flex flex-col gap-2">
+              <label htmlFor="mobile" className="text-[10px] uppercase tracking-wider text-zinc-400">Mobile Number</label>
+              <input
+                type="tel"
+                name="mobile"
+                id="mobile"
+                required
+                pattern="[0-9]{10}"
+                maxLength="10"
+                minLength="10"
+                title="Please enter exactly 10 digits"
+                placeholder="9876543210"
+                className="w-full bg-zinc-950/60 border border-white/10 rounded-xl px-4 py-3 text-sm text-white placeholder-zinc-600 focus:outline-none focus:border-orange-500 transition-colors"
+              />
             </div>
 
             <div className="flex flex-col gap-2">

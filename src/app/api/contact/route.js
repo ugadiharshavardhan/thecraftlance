@@ -3,11 +3,18 @@ import nodemailer from 'nodemailer';
 
 export async function POST(req) {
   try {
-    const { name, email, project_type, message } = await req.json();
+    const { name, email, mobile, project_type, message } = await req.json();
 
-    if (!name || !email || !message) {
+    if (!name || !email || !mobile || !message) {
       return NextResponse.json(
-        { error: 'Name, email, and message are required' },
+        { error: 'Name, email, mobile, and message are required' },
+        { status: 400 }
+      );
+    }
+
+    if (!/^\d{10}$/.test(mobile)) {
+      return NextResponse.json(
+        { error: 'Mobile number must be exactly 10 digits' },
         { status: 400 }
       );
     }
@@ -36,6 +43,7 @@ You have received a new message from your website contact form:
 
 Name: ${name}
 Email: ${email}
+Mobile: ${mobile || 'N/A'}
 Project Type: ${project_type}
 
 Message:
@@ -49,6 +57,7 @@ ${message}
           <h3>New Project Inquiry</h3>
           <p><strong>Name:</strong> ${name}</p>
           <p><strong>Email:</strong> ${email}</p>
+          <p><strong>Mobile:</strong> ${mobile || 'N/A'}</p>
           <p><strong>Project Type:</strong> ${project_type}</p>
           <p><strong>Message:</strong><br/>${message.replace(/\n/g, '<br/>')}</p>
         </div>
