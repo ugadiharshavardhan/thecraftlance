@@ -15,7 +15,7 @@ const COMPANY = [
 
 const CONNECT = [
   { label: "Instagram", href: "https://www.instagram.com/thecraftlance/" },
-  { label: "LinkedIn", href: "" },
+  { label: "LinkedIn", href: "https://www.linkedin.com/in/the-craft-lance-050694429/" },
   { label: "thecraftlance@gmail.com", href: "https://mail.google.com/mail/?view=cm&fs=1&to=thecraftlance@gmail.com" },
 ];
 

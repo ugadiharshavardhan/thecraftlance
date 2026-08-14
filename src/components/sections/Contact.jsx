@@ -88,6 +88,8 @@ export default function Contact() {
             </a>
             <a 
               href="https://www.instagram.com/thecraftlance/" 
+              target="_blank"
+              rel="noopener noreferrer"
               className="text-zinc-400 hover:text-orange-500 transition-colors p-2 bg-zinc-900/40 rounded-full border border-white/10 hover:border-orange-500/50"
               aria-label="Instagram"
             >
@@ -95,6 +97,19 @@ export default function Contact() {
                 <rect x="3" y="3" width="18" height="18" rx="5" />
                 <circle cx="12" cy="12" r="4" />
                 <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none" />
+              </svg>
+            </a>
+            <a 
+              href="https://www.linkedin.com/in/the-craft-lance-050694429/" 
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-zinc-400 hover:text-orange-500 transition-colors p-2 bg-zinc-900/40 rounded-full border border-white/10 hover:border-orange-500/50"
+              aria-label="LinkedIn"
+            >
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
+                <rect x="2" y="9" width="4" height="12" />
+                <circle cx="4" cy="4" r="2" />
               </svg>
             </a>
           </div>
