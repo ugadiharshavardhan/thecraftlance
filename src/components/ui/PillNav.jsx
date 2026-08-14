@@ -25,7 +25,6 @@ const PillNav = ({
   const tlRefs = useRef([]);
   const activeTweenRefs = useRef([]);
   const logoImgRef = useRef(null);
-  const logoTweenRef = useRef(null);
   const hamburgerRef = useRef(null);
   const mobileMenuRef = useRef(null);
   const navItemsRef = useRef(null);
@@ -171,19 +170,6 @@ const PillNav = ({
     });
   };
 
-  const handleLogoEnter = () => {
-    const img = logoImgRef.current;
-    if (!img) return;
-    logoTweenRef.current?.kill();
-    gsap.set(img, { rotate: 0 });
-    logoTweenRef.current = gsap.to(img, {
-      rotate: 360,
-      duration: 0.2,
-      ease,
-      overwrite: "auto",
-    });
-  };
-
   const toggleMobileMenu = () => {
     const newState = !isMobileMenuOpen;
     setIsMobileMenuOpen(newState);
@@ -291,7 +277,6 @@ const PillNav = ({
             className="pill-logo"
             href={items[0].href}
             aria-label="Home"
-            onMouseEnter={handleLogoEnter}
             role="menuitem"
             ref={(el) => {
               logoRef.current = el;
@@ -304,7 +289,6 @@ const PillNav = ({
             className="pill-logo"
             href={items?.[0]?.href || "/"}
             aria-label="Home"
-            onMouseEnter={handleLogoEnter}
             ref={(el) => {
               logoRef.current = el;
             }}

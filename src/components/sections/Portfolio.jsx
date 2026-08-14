@@ -45,7 +45,7 @@ const PROJECTS = [
     tag: "AI Dashboard",
     description: "Advanced prediction engine and market intelligence platform.",
     img: "https://user-images.githubusercontent.com/97469459/233842844-10f7d76d-c2d5-46bb-a413-1875b5771230.jpg",
-    link: "hospital-app-black-mu.vercel.app",
+    link: "https://hospital-app-black-mu.vercel.app",
   }
 ];
 
@@ -90,6 +90,12 @@ function ChevronDownIcon({ className = "" }) {
   );
 }
 
+function getProjectLink(project) {
+  if (!project?.link) return null;
+  if (/^https?:\/\//i.test(project.link)) return project.link;
+  return `https://${project.link}`;
+}
+
 function ProjectCard({ project, active }) {
   return (
     <div
@@ -110,16 +116,29 @@ function ProjectCard({ project, active }) {
       
       {/* Link indicator on hover */}
       <div className="absolute top-4 right-4 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
-        <span className="flex h-9 w-9 items-center justify-center rounded-full border border-white/30 bg-black/60 text-zinc-50 backdrop-blur-sm">
-          <ArrowUpRightIcon />
-        </span>
+        {getProjectLink(project) ? (
+          <a
+            className="flex h-9 w-9 items-center justify-center rounded-full border border-white/30 bg-black/60 text-zinc-50 backdrop-blur-sm"
+            href={getProjectLink(project)}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label={`Open ${project.name} live link`}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <ArrowUpRightIcon />
+          </a>
+        ) : (
+          <span className="flex h-9 w-9 items-center justify-center rounded-full border border-white/30 bg-black/60 text-zinc-50 backdrop-blur-sm">
+            <ArrowUpRightIcon />
+          </span>
+        )}
       </div>
     </div>
   );
 }
 
 // Separate component for the 3D card wrapper to strictly follow React hook rules
-function CarouselCard({ project, index, smoothProgress, dimensions, angleStep, active, onClick }) {
+function CarouselCard({ project, index, smoothProgress, dimensions, angleStep, active }) {
   const theta = useTransform(smoothProgress, (p) => (index - p) * angleStep);
   
   const x = useTransform(theta, (t) => dimensions.radius * Math.sin(t));
@@ -155,7 +174,6 @@ function CarouselCard({ project, index, smoothProgress, dimensions, angleStep, a
         scale: 1.05,
         transition: { duration: 0.3 },
       }}
-      onClick={onClick}
     >
       <ProjectCard project={project} active={active} />
     </motion.div>
@@ -348,11 +366,6 @@ export default function Portfolio() {
                 dimensions={dimensions}
                 angleStep={angleStep}
                 active={currentProject === index}
-                onClick={() => {
-                  if (project.link) {
-                    window.open(project.link, "_blank", "noopener,noreferrer");
-                  }
-                }}
               />
             );
           })}
