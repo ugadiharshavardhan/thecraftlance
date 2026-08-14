@@ -1,10 +1,9 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
+import { motion } from "framer-motion";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import OptionWheel from "@/components/ui/OptionWheel";
 
 const PROJECTS = [
   {
@@ -71,7 +70,7 @@ function ArrowUpRightIcon({ className = "" }) {
   );
 }
 
-function ChevronDownIcon({ className = "" }) {
+function ChevronLeftIcon({ className = "" }) {
   return (
     <svg
       className={className}
@@ -85,7 +84,26 @@ function ChevronDownIcon({ className = "" }) {
       strokeLinejoin="round"
       aria-hidden
     >
-      <path d="M6 9l6 6 6-6" />
+      <path d="M15 18l-6-6 6-6" />
+    </svg>
+  );
+}
+
+function ChevronRightIcon({ className = "" }) {
+  return (
+    <svg
+      className={className}
+      width="20"
+      height="20"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden
+    >
+      <path d="M9 18l6-6-6-6" />
     </svg>
   );
 }
@@ -96,94 +114,10 @@ function getProjectLink(project) {
   return `https://${project.link}`;
 }
 
-function ProjectCard({ project, active }) {
-  const link = getProjectLink(project);
-
-  return (
-    <a
-      href={link || "#"}
-      target="_blank"
-      rel="noopener noreferrer"
-      aria-label={`Open ${project.name} live project in another tab`}
-      className={`block relative h-full w-full overflow-hidden rounded-[1.5rem] border border-white/10 transition-all duration-500 touch-manipulation select-none ${active
-          ? "shadow-[0_30px_100px_rgba(255,255,255,0.15)] ring-1 ring-white/30"
-          : "shadow-[0_12px_40px_rgba(0,0,0,0.8)] filter brightness-[0.4]"
-        }`}
-    >
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
-        src={project.img}
-        alt={project.name}
-        className="absolute inset-0 h-full w-full object-cover"
-        draggable={false}
-      />
-      <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent" />
-
-      {/* Permanent top-right button */}
-      <div className="absolute top-4 right-4 z-10">
-        <span className="flex h-10 w-10 items-center justify-center rounded-full border border-white/30 bg-black/75 text-white backdrop-blur-md shadow-lg transition-transform active:scale-95 group-hover:scale-110 group-hover:border-orange-500 group-hover:bg-orange-500">
-          <ArrowUpRightIcon />
-        </span>
-      </div>
-    </a>
-  );
-}
-
-// Separate component for the 3D card wrapper to strictly follow React hook rules
-function CarouselCard({ project, index, smoothProgress, dimensions, angleStep, active }) {
-  const theta = useTransform(smoothProgress, (p) => (index - p) * angleStep);
-
-  const x = useTransform(theta, (t) => dimensions.radius * Math.sin(t));
-  const z = useTransform(theta, (t) => dimensions.radius * Math.cos(t) - dimensions.radius);
-  const rotateY = useTransform(theta, (t) => (t * 180) / Math.PI);
-  const opacity = useTransform(theta, (t) => {
-    const cos = Math.cos(t);
-    if (cos < -0.3) return 0;
-    return (cos + 0.3) / 1.3;
-  });
-  const scale = useTransform(theta, (t) => {
-    const cos = Math.cos(t);
-    return 0.75 + 0.25 * ((cos + 1) / 2);
-  });
-  const zIndex = useTransform(theta, (t) => Math.round((Math.cos(t) + 1) * 100));
-
-  return (
-    <motion.div
-      className="group absolute cursor-pointer"
-      style={{
-        width: `${dimensions.cardW}px`,
-        height: `${dimensions.cardH}px`,
-        transformStyle: "preserve-3d",
-        backfaceVisibility: "hidden",
-        x,
-        z,
-        rotateY,
-        opacity,
-        scale,
-        zIndex,
-      }}
-      whileHover={{
-        scale: 1.05,
-        transition: { duration: 0.3 },
-      }}
-    >
-      <ProjectCard project={project} active={active} />
-    </motion.div>
-  );
-}
-
 export default function Portfolio() {
   const sectionRef = useRef(null);
-  const containerRef = useRef(null);
+  const trackRef = useRef(null);
   const scrollTriggerInstance = useRef(null);
-
-  // MotionValues for smooth scroll mapping without triggering React re-renders on scroll
-  const scrollProgress = useMotionValue(0);
-  const smoothProgress = useSpring(scrollProgress, {
-    stiffness: 80,
-    damping: 25,
-    mass: 0.5,
-  });
 
   const [currentProject, setCurrentProject] = useState(0);
 
@@ -195,9 +129,7 @@ export default function Portfolio() {
     const total = end - start;
     const targetScroll = start + (index / (COUNT - 1)) * total;
 
-    if (st.scroll) {
-      st.scroll(targetScroll);
-    } else if (window.__lenis) {
+    if (window.__lenis) {
       window.__lenis.scrollTo(targetScroll, { duration: 1.2 });
     } else {
       window.scrollTo({ top: targetScroll, behavior: "smooth" });
@@ -205,39 +137,38 @@ export default function Portfolio() {
   };
 
   useEffect(() => {
-    // Sync the active index state with the spring
-    const unsubscribe = smoothProgress.on("change", (latest) => {
-      const idx = Math.round(latest);
-      let normalizedIdx = idx % COUNT;
-      if (normalizedIdx < 0) normalizedIdx += COUNT;
-      setCurrentProject((prev) => (prev !== normalizedIdx ? normalizedIdx : prev));
-    });
-
-    return () => unsubscribe();
-  }, [smoothProgress]);
-
-  useEffect(() => {
     gsap.registerPlugin(ScrollTrigger);
 
     const section = sectionRef.current;
-    if (!section) return;
-
-    const totalScrollHeight = COUNT * 150;
+    const track = trackRef.current;
+    if (!section || !track) return;
 
     const ctx = gsap.context(() => {
-      scrollTriggerInstance.current = ScrollTrigger.create({
-        trigger: section,
-        start: "top top",
-        end: `+=${totalScrollHeight}%`,
-        pin: true,
-        scrub: 1,
-        invalidateOnRefresh: true,
-        onUpdate: (self) => {
-          // Map scroll progress to 0 -> COUNT - 1 directly on the MotionValue
-          const currentVal = self.progress * (COUNT - 1);
-          scrollProgress.set(currentVal);
+      const getScrollAmount = () => {
+        return track.scrollWidth - window.innerWidth;
+      };
+
+      const tween = gsap.to(track, {
+        x: () => -getScrollAmount(),
+        ease: "none",
+        scrollTrigger: {
+          trigger: section,
+          start: "top top",
+          end: () => `+=${getScrollAmount()}`,
+          pin: true,
+          scrub: 1,
+          invalidateOnRefresh: true,
+          onUpdate: (self) => {
+            const progressIndex = Math.min(
+              COUNT - 1,
+              Math.max(0, Math.floor(self.progress * COUNT))
+            );
+            setCurrentProject(progressIndex);
+          },
         },
       });
+
+      scrollTriggerInstance.current = tween.scrollTrigger;
     }, section);
 
     const refresh = () => ScrollTrigger.refresh();
@@ -275,151 +206,148 @@ export default function Portfolio() {
       if (boundLenis) boundLenis.off("scroll", onLenisScroll);
       ctx.revert();
     };
-  }, [scrollProgress]);
-
-  // Compute 3D variables dynamically
-  const [dimensions, setDimensions] = useState({ radius: 450, cardW: 280, cardH: 380 });
-
-  useEffect(() => {
-    const handleResize = () => {
-      if (window.innerWidth < 768) {
-        setDimensions({ radius: 240, cardW: 180, cardH: 260 });
-      } else if (window.innerWidth < 1024) {
-        setDimensions({ radius: 360, cardW: 240, cardH: 340 });
-      } else {
-        setDimensions({ radius: 480, cardW: 280, cardH: 380 });
-      }
-    };
-
-    handleResize();
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
   return (
     <section
       id="work"
       ref={sectionRef}
-      className="relative h-svh w-full overflow-hidden bg-black text-zinc-50"
+      className="relative h-svh w-full overflow-hidden bg-black text-zinc-50 select-none"
     >
-      {/* White Grid Lines Background - Solid with rows & columns */}
+      {/* Grid Lines Background */}
       <div
         className="absolute inset-0 pointer-events-none z-0"
         style={{
           backgroundImage: `
-            linear-gradient(to right, rgba(255, 255, 255, 0.15) 1px, transparent 1px),
-            linear-gradient(to bottom, rgba(255, 255, 255, 0.15) 1px, transparent 1px)
+            linear-gradient(to right, rgba(255, 255, 255, 0.08) 1px, transparent 1px),
+            linear-gradient(to bottom, rgba(255, 255, 255, 0.08) 1px, transparent 1px)
           `,
           backgroundSize: "60px 60px",
           backgroundPosition: "center center",
         }}
       />
-      {/* Radial vignette fade for grid lines */}
+      {/* Subtle Ambient Radial Glow */}
       <div
-        className="absolute inset-0 pointer-events-none z-0 bg-transparent"
+        className="absolute inset-0 pointer-events-none z-0"
         style={{
-          background: "radial-gradient(circle at center, transparent 20%, black 90%)"
+          background: "radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.03) 0%, transparent 70%)"
         }}
       />
 
-      {/* Header Info - Left Aligned and Renamed to "Our Work" */}
-      <div className="absolute top-12 left-6 md:left-14 z-30 pointer-events-none">
-        <span className="text-[10px] font-semibold uppercase tracking-[0.3em] text-orange-500">
-          Selected Projects
-        </span>
-        <h2 className="mt-2 font-display text-4xl font-semibold tracking-tight text-white md:text-5xl">
-          Our Work
-        </h2>
-      </div>
+      {/* Main Content Layout Container */}
+      <div className="relative z-10 flex flex-col justify-between h-full w-full py-8 md:py-12">
+        {/* Header Bar */}
+        <div className="flex items-end justify-between px-6 md:px-16 lg:px-24">
+          <div>
+            <div className="flex items-center gap-2 mb-2">
+              <span className="h-2 w-2 rounded-full bg-white animate-pulse" />
+              <span className="text-xs font-semibold uppercase tracking-[0.3em] text-zinc-400 font-mono">
+                Selected Projects
+              </span>
+            </div>
+            <h2 className="font-display text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-white">
+              Our Work
+            </h2>
+          </div>
 
-      {/* 3D Stage Container */}
-      <div
-        ref={containerRef}
-        className="relative z-10 flex h-full w-full items-center justify-center overflow-hidden"
-        style={{ perspective: "1500px" }}
-      >
-        <div
-          className="relative flex items-center justify-center"
-          style={{
-            transformStyle: "preserve-3d",
-            width: `${dimensions.cardW}px`,
-            height: `${dimensions.cardH}px`,
-          }}
-        >
-          {PROJECTS.map((project, index) => {
-            const angleStep = (2 * Math.PI) / COUNT;
+          {/* Navigation Controls & Counter */}
+          <div className="flex items-center gap-4">
+            <div className="hidden sm:flex items-center gap-1.5 font-mono text-sm tracking-widest text-zinc-400 bg-zinc-900/80 px-4 py-2 rounded-full border border-white/10 backdrop-blur-md">
+              <span className="text-white font-bold">
+                {String(currentProject + 1).padStart(2, "0")}
+              </span>
+              <span className="text-zinc-600">/</span>
+              <span>{String(COUNT).padStart(2, "0")}</span>
+            </div>
 
-            return (
-              <CarouselCard
-                key={project.id}
-                project={project}
-                index={index}
-                smoothProgress={smoothProgress}
-                dimensions={dimensions}
-                angleStep={angleStep}
-                active={currentProject === index}
-              />
-            );
-          })}
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => scrollToProject(Math.max(0, currentProject - 1))}
+                disabled={currentProject === 0}
+                aria-label="Previous project"
+                className="flex h-11 w-11 items-center justify-center rounded-full border border-white/15 bg-zinc-900/80 text-white backdrop-blur-md transition-all duration-300 hover:border-white hover:bg-white/10 active:scale-95 disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:border-white/15 disabled:hover:bg-zinc-900/80"
+              >
+                <ChevronLeftIcon />
+              </button>
+              <button
+                onClick={() => scrollToProject(Math.min(COUNT - 1, currentProject + 1))}
+                disabled={currentProject === COUNT - 1}
+                aria-label="Next project"
+                className="flex h-11 w-11 items-center justify-center rounded-full border border-white/15 bg-zinc-900/80 text-white backdrop-blur-md transition-all duration-300 hover:border-white hover:bg-white/10 active:scale-95 disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:border-white/15 disabled:hover:bg-zinc-900/80"
+              >
+                <ChevronRightIcon />
+              </button>
+            </div>
+          </div>
         </div>
-      </div>
 
-      {/* OptionWheel on the left side of the screen - hidden on mobile/tablet */}
-      <div className="absolute left-6 md:left-14 top-1/2 -translate-y-1/2 w-80 md:w-96 h-[320px] md:h-[450px] z-30 hidden lg:flex items-center justify-start pointer-events-auto select-none">
-        <OptionWheel
-          items={PROJECTS.map((p) => p.name)}
-          selected={currentProject}
-          textColor="#666666"
-          activeColor="#ffffff"
-          side="left"
-          fontSize={2.25}
-          spacing={1.6}
-          curve={1}
-          tilt={8}
-          blur={1.5}
-          fade={0.35}
-          smoothing={300}
-          inset={20}
-          loop={false}
-          draggable
-          onChange={(index) => {
-            scrollToProject(index);
-          }}
-        />
-      </div>
+        {/* Horizontal Track Area */}
+        <div className="relative w-full overflow-hidden my-auto py-4">
+          <div
+            ref={trackRef}
+            className="flex items-center gap-6 sm:gap-8 md:gap-12 px-6 md:px-16 lg:px-24 w-max"
+          >
+            {PROJECTS.map((project, index) => {
+              const link = getProjectLink(project);
 
-      {/* Footer Info displaying current project tag & description */}
-      <div className="absolute bottom-16 inset-x-0 z-30 text-center pointer-events-none">
-        <motion.div
-          key={currentProject}
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -10 }}
-          transition={{ duration: 0.4 }}
-          className="flex flex-col items-center gap-1 px-4"
-        >
-          <span className="font-mono text-xs tracking-[0.25em] text-orange-500 font-semibold uppercase mb-1">
-            {PROJECTS[currentProject]?.tag}
-          </span>
-          <h3 className="text-2xl sm:text-3xl font-display font-semibold text-white lg:hidden">
-            {PROJECTS[currentProject]?.name}
-          </h3>
-          <p className="max-w-xl mx-auto text-sm sm:text-base text-zinc-400 mt-2 px-4 leading-relaxed">
-            {PROJECTS[currentProject]?.description}
-          </p>
-        </motion.div>
-      </div>
+              return (
+                <div
+                  key={project.id}
+                  className="group relative flex flex-col justify-between w-[85vw] sm:w-[460px] md:w-[540px] lg:w-[620px] shrink-0 h-[60vh] sm:h-[65vh] max-h-[540px] min-h-[400px] rounded-[2rem] border border-white/10 bg-zinc-950/80 backdrop-blur-xl overflow-hidden shadow-2xl p-6 sm:p-8 lg:p-10 transition-all duration-500 hover:border-white/30 hover:shadow-[0_20px_60px_rgba(255,255,255,0.06)]"
+                >
+                  {/* Image Background & Overlay */}
+                  <div className="absolute inset-0 z-0 overflow-hidden">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={project.img}
+                      alt={project.name}
+                      className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+                      draggable={false}
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black via-black/75 to-black/40 transition-opacity duration-500 group-hover:opacity-90" />
+                  </div>
 
-      {/* Scroll indicator */}
-      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-30 flex flex-col items-center gap-1 pointer-events-none">
-        <motion.span
-          animate={{ y: [0, 5, 0] }}
-          transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
-          className="text-white/40"
-        >
-          <ChevronDownIcon />
-        </motion.span>
+                  {/* Card Top Row */}
+                  <div className="relative z-10 flex items-center justify-between">
+                    <span className="font-mono text-xs tracking-widest text-zinc-300 font-semibold bg-white/10 border border-white/15 px-3 py-1.5 rounded-full backdrop-blur-md">
+                      {project.tag}
+                    </span>
+                    <span className="font-mono text-xs text-zinc-400 tracking-widest font-semibold bg-black/60 border border-white/10 px-3 py-1.5 rounded-full backdrop-blur-md">
+                      {String(index + 1).padStart(2, "0")}
+                    </span>
+                  </div>
+
+                  {/* Card Bottom Row */}
+                  <div className="relative z-10 mt-auto pt-6">
+                    <h3 className="font-display text-2xl sm:text-3xl lg:text-4xl font-bold text-white tracking-tight transition-colors duration-300">
+                      {project.name}
+                    </h3>
+                    <p className="mt-2 text-xs sm:text-sm text-zinc-300 line-clamp-3 leading-relaxed max-w-lg">
+                      {project.description}
+                    </p>
+
+                    <div className="mt-6 pt-4 border-t border-white/10 flex items-center justify-between">
+                      <a
+                        href={link || "#"}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label={`View live project ${project.name}`}
+                        className="inline-flex items-center gap-2 text-xs sm:text-sm font-semibold text-white transition-colors"
+                      >
+                        <span>Explore Project</span>
+                        <span className="flex h-8 w-8 items-center justify-center rounded-full border border-white/20 bg-white/5 text-white transition-all duration-300 group-hover:border-white group-hover:bg-white group-hover:text-black group-hover:translate-x-1 group-hover:-translate-y-0.5">
+                          <ArrowUpRightIcon />
+                        </span>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
       </div>
     </section>
   );
 }
+
