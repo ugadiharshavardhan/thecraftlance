@@ -1,9 +1,7 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { motion } from "framer-motion";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 const PROJECTS = [
   {
@@ -115,104 +113,78 @@ function getProjectLink(project) {
 }
 
 export default function Portfolio() {
-  const sectionRef = useRef(null);
-  const trackRef = useRef(null);
-  const scrollTriggerInstance = useRef(null);
-
+  const containerRef = useRef(null);
   const [currentProject, setCurrentProject] = useState(0);
 
-  const scrollToProject = (index) => {
-    if (!scrollTriggerInstance.current) return;
-    const st = scrollTriggerInstance.current;
-    const start = st.start;
-    const end = st.end;
-    const total = end - start;
-    const targetScroll = start + (index / (COUNT - 1)) * total;
+  const isMouseDown = useRef(false);
+  const startX = useRef(0);
+  const scrollLeftPos = useRef(0);
 
-    if (window.__lenis) {
-      window.__lenis.scrollTo(targetScroll, { duration: 1.2 });
-    } else {
-      window.scrollTo({ top: targetScroll, behavior: "smooth" });
+  const handleScroll = () => {
+    if (!containerRef.current) return;
+    const container = containerRef.current;
+    const cards = container.querySelectorAll(".project-card");
+    if (!cards.length) return;
+
+    const style = window.getComputedStyle(container);
+    const paddingLeft = parseFloat(style.paddingLeft) || 24;
+
+    let closestIndex = 0;
+    let minDistance = Infinity;
+
+    cards.forEach((card, idx) => {
+      const targetLeft = card.offsetLeft - paddingLeft;
+      const distance = Math.abs(container.scrollLeft - targetLeft);
+      if (distance < minDistance) {
+        minDistance = distance;
+        closestIndex = idx;
+      }
+    });
+
+    setCurrentProject(closestIndex);
+  };
+
+  const scrollToProject = (index) => {
+    if (!containerRef.current) return;
+    const container = containerRef.current;
+    const cards = container.querySelectorAll(".project-card");
+    if (cards[index]) {
+      const card = cards[index];
+      const style = window.getComputedStyle(container);
+      const paddingLeft = parseFloat(style.paddingLeft) || 24;
+      const targetLeft = card.offsetLeft - paddingLeft;
+
+      container.scrollTo({
+        left: targetLeft,
+        behavior: "smooth",
+      });
+      setCurrentProject(index);
     }
   };
 
-  useEffect(() => {
-    gsap.registerPlugin(ScrollTrigger);
+  const handleMouseDown = (e) => {
+    if (!containerRef.current) return;
+    isMouseDown.current = true;
+    startX.current = e.pageX - containerRef.current.offsetLeft;
+    scrollLeftPos.current = containerRef.current.scrollLeft;
+  };
 
-    const section = sectionRef.current;
-    const track = trackRef.current;
-    if (!section || !track) return;
+  const handleMouseLeaveOrUp = () => {
+    isMouseDown.current = false;
+  };
 
-    const ctx = gsap.context(() => {
-      const getScrollAmount = () => {
-        return track.scrollWidth - window.innerWidth;
-      };
-
-      const tween = gsap.to(track, {
-        x: () => -getScrollAmount(),
-        ease: "none",
-        scrollTrigger: {
-          trigger: section,
-          start: "top top",
-          end: () => `+=${getScrollAmount()}`,
-          pin: true,
-          scrub: 1,
-          invalidateOnRefresh: true,
-          onUpdate: (self) => {
-            const progressIndex = Math.min(
-              COUNT - 1,
-              Math.max(0, Math.floor(self.progress * COUNT))
-            );
-            setCurrentProject(progressIndex);
-          },
-        },
-      });
-
-      scrollTriggerInstance.current = tween.scrollTrigger;
-    }, section);
-
-    const refresh = () => ScrollTrigger.refresh();
-    const onLenisScroll = () => ScrollTrigger.update();
-    let boundLenis = null;
-    let onLenisReady = null;
-
-    if (window.__lenis) {
-      bindLenis(window.__lenis);
-    } else {
-      onLenisReady = (e) => {
-        bindLenis(e.detail);
-        if (onLenisReady) {
-          window.removeEventListener("lenis:ready", onLenisReady);
-          onLenisReady = null;
-        }
-      };
-      window.addEventListener("lenis:ready", onLenisReady);
-    }
-
-    function bindLenis(lenis) {
-      if (!lenis || boundLenis) return;
-      boundLenis = lenis;
-      lenis.on("scroll", onLenisScroll);
-      requestAnimationFrame(refresh);
-    }
-
-    window.addEventListener("load", refresh);
-    const t = setTimeout(refresh, 200);
-
-    return () => {
-      clearTimeout(t);
-      window.removeEventListener("load", refresh);
-      if (onLenisReady) window.removeEventListener("lenis:ready", onLenisReady);
-      if (boundLenis) boundLenis.off("scroll", onLenisScroll);
-      ctx.revert();
-    };
-  }, []);
+  const handleMouseMove = (e) => {
+    if (!isMouseDown.current || !containerRef.current) return;
+    e.preventDefault();
+    const x = e.pageX - containerRef.current.offsetLeft;
+    const walk = (x - startX.current) * 1.5;
+    containerRef.current.scrollLeft = scrollLeftPos.current - walk;
+  };
 
   return (
     <section
       id="work"
-      ref={sectionRef}
-      className="relative h-svh w-full overflow-hidden bg-black text-zinc-50 select-none"
+      className="relative w-full py-16 sm:py-24 md:py-28 bg-black text-zinc-50 select-none overflow-hidden"
     >
       {/* Grid Lines Background */}
       <div
@@ -235,9 +207,9 @@ export default function Portfolio() {
       />
 
       {/* Main Content Layout Container */}
-      <div className="relative z-10 flex flex-col justify-between h-full w-full py-8 md:py-12">
+      <div className="relative z-10 flex flex-col justify-between w-full">
         {/* Header Bar */}
-        <div className="flex items-end justify-between px-6 md:px-16 lg:px-24">
+        <div className="flex items-end justify-between px-6 md:px-16 lg:px-24 mb-8 sm:mb-12">
           <div>
             <div className="flex items-center gap-2 mb-2">
               <span className="h-2 w-2 rounded-full bg-white animate-pulse" />
@@ -281,19 +253,24 @@ export default function Portfolio() {
           </div>
         </div>
 
-        {/* Horizontal Track Area */}
-        <div className="relative w-full overflow-hidden my-auto py-4">
-          <div
-            ref={trackRef}
-            className="flex items-center gap-6 sm:gap-8 md:gap-12 px-6 md:px-16 lg:px-24 w-max"
-          >
+        {/* Horizontal Scroll Track Container */}
+        <div
+          ref={containerRef}
+          onScroll={handleScroll}
+          onMouseDown={handleMouseDown}
+          onMouseLeave={handleMouseLeaveOrUp}
+          onMouseUp={handleMouseLeaveOrUp}
+          onMouseMove={handleMouseMove}
+          className="relative w-full overflow-x-auto scroll-smooth scroll-pl-6 md:scroll-pl-16 lg:scroll-pl-24 px-6 md:px-16 lg:px-24 scrollbar-none snap-x snap-mandatory py-4 cursor-grab active:cursor-grabbing"
+        >
+          <div className="flex items-center gap-6 sm:gap-8 md:gap-10 w-max pr-6 md:pr-16 lg:pr-24">
             {PROJECTS.map((project, index) => {
               const link = getProjectLink(project);
 
               return (
                 <div
                   key={project.id}
-                  className="group relative flex flex-col justify-between w-[85vw] sm:w-[460px] md:w-[540px] lg:w-[620px] shrink-0 h-[60vh] sm:h-[65vh] max-h-[540px] min-h-[400px] rounded-[2rem] border border-white/10 bg-zinc-950/80 backdrop-blur-xl overflow-hidden shadow-2xl p-6 sm:p-8 lg:p-10 transition-all duration-500 hover:border-white/30 hover:shadow-[0_20px_60px_rgba(255,255,255,0.06)]"
+                  className="project-card snap-start group relative flex flex-col justify-between w-[85vw] sm:w-[460px] md:w-[540px] lg:w-[600px] shrink-0 h-[480px] sm:h-[520px] rounded-[2rem] border border-white/10 bg-zinc-950/80 backdrop-blur-xl overflow-hidden shadow-2xl p-6 sm:p-8 lg:p-10 transition-all duration-500 hover:border-white/30 hover:shadow-[0_20px_60px_rgba(255,255,255,0.06)]"
                 >
                   {/* Image Background & Overlay */}
                   <div className="absolute inset-0 z-0 overflow-hidden">
@@ -350,4 +327,5 @@ export default function Portfolio() {
     </section>
   );
 }
+
 
