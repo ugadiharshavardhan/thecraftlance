@@ -99,16 +99,13 @@ function getProjectLink(project) {
 function ProjectCard({ project, active }) {
   const link = getProjectLink(project);
 
-  const handleCardClick = () => {
-    if (link) {
-      window.open(link, "_blank", "noopener,noreferrer");
-    }
-  };
-
   return (
-    <div
-      onClick={handleCardClick}
-      className={`relative h-full w-full overflow-hidden rounded-[1.5rem] border border-white/10 transition-all duration-500 cursor-pointer ${active
+    <a
+      href={link || "#"}
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label={`Open ${project.name} live project in another tab`}
+      className={`block relative h-full w-full overflow-hidden rounded-[1.5rem] border border-white/10 transition-all duration-500 touch-manipulation select-none ${active
           ? "shadow-[0_30px_100px_rgba(255,255,255,0.15)] ring-1 ring-white/30"
           : "shadow-[0_12px_40px_rgba(0,0,0,0.8)] filter brightness-[0.4]"
         }`}
@@ -122,13 +119,13 @@ function ProjectCard({ project, active }) {
       />
       <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent" />
 
-      {/* Link indicator on hover */}
-      <div className="absolute top-4 right-4 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
-        <span className="flex h-9 w-9 items-center justify-center rounded-full border border-white/30 bg-black/60 text-zinc-50 backdrop-blur-sm group-hover:bg-orange-500 group-hover:border-orange-500 transition-colors">
+      {/* Permanent top-right button */}
+      <div className="absolute top-4 right-4 z-10">
+        <span className="flex h-10 w-10 items-center justify-center rounded-full border border-white/30 bg-black/75 text-white backdrop-blur-md shadow-lg transition-transform active:scale-95 group-hover:scale-110 group-hover:border-orange-500 group-hover:bg-orange-500">
           <ArrowUpRightIcon />
         </span>
       </div>
-    </div>
+    </a>
   );
 }
 
