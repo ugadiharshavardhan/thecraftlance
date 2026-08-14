@@ -97,13 +97,21 @@ function getProjectLink(project) {
 }
 
 function ProjectCard({ project, active }) {
+  const link = getProjectLink(project);
+
+  const handleCardClick = () => {
+    if (link) {
+      window.open(link, "_blank", "noopener,noreferrer");
+    }
+  };
+
   return (
     <div
-      className={`relative h-full w-full overflow-hidden rounded-[1.5rem] border border-white/10 transition-all duration-500 ${
-        active 
-          ? "shadow-[0_30px_100px_rgba(255,255,255,0.15)] ring-1 ring-white/30" 
+      onClick={handleCardClick}
+      className={`relative h-full w-full overflow-hidden rounded-[1.5rem] border border-white/10 transition-all duration-500 cursor-pointer ${active
+          ? "shadow-[0_30px_100px_rgba(255,255,255,0.15)] ring-1 ring-white/30"
           : "shadow-[0_12px_40px_rgba(0,0,0,0.8)] filter brightness-[0.4]"
-      }`}
+        }`}
     >
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
@@ -113,25 +121,12 @@ function ProjectCard({ project, active }) {
         draggable={false}
       />
       <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent" />
-      
+
       {/* Link indicator on hover */}
       <div className="absolute top-4 right-4 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
-        {getProjectLink(project) ? (
-          <a
-            className="flex h-9 w-9 items-center justify-center rounded-full border border-white/30 bg-black/60 text-zinc-50 backdrop-blur-sm"
-            href={getProjectLink(project)}
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label={`Open ${project.name} live link`}
-            onClick={(e) => e.stopPropagation()}
-          >
-            <ArrowUpRightIcon />
-          </a>
-        ) : (
-          <span className="flex h-9 w-9 items-center justify-center rounded-full border border-white/30 bg-black/60 text-zinc-50 backdrop-blur-sm">
-            <ArrowUpRightIcon />
-          </span>
-        )}
+        <span className="flex h-9 w-9 items-center justify-center rounded-full border border-white/30 bg-black/60 text-zinc-50 backdrop-blur-sm group-hover:bg-orange-500 group-hover:border-orange-500 transition-colors">
+          <ArrowUpRightIcon />
+        </span>
       </div>
     </div>
   );
@@ -140,7 +135,7 @@ function ProjectCard({ project, active }) {
 // Separate component for the 3D card wrapper to strictly follow React hook rules
 function CarouselCard({ project, index, smoothProgress, dimensions, angleStep, active }) {
   const theta = useTransform(smoothProgress, (p) => (index - p) * angleStep);
-  
+
   const x = useTransform(theta, (t) => dimensions.radius * Math.sin(t));
   const z = useTransform(theta, (t) => dimensions.radius * Math.cos(t) - dimensions.radius);
   const rotateY = useTransform(theta, (t) => (t * 180) / Math.PI);
@@ -184,7 +179,7 @@ export default function Portfolio() {
   const sectionRef = useRef(null);
   const containerRef = useRef(null);
   const scrollTriggerInstance = useRef(null);
-  
+
   // MotionValues for smooth scroll mapping without triggering React re-renders on scroll
   const scrollProgress = useMotionValue(0);
   const smoothProgress = useSpring(scrollProgress, {
@@ -323,7 +318,7 @@ export default function Portfolio() {
         }}
       />
       {/* Radial vignette fade for grid lines */}
-      <div 
+      <div
         className="absolute inset-0 pointer-events-none z-0 bg-transparent"
         style={{
           background: "radial-gradient(circle at center, transparent 20%, black 90%)"
