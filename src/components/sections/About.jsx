@@ -52,10 +52,14 @@ export default function About() {
               don&apos;t just design and develop — we architect digital experiences
               that resonate, convert, and endure.
             </p>
-            <p className="text-zinc-400 text-base leading-relaxed">
+            <p className="text-zinc-400 text-base leading-relaxed mb-6">
               We partner with visionary founders and forward-thinking brands to
               translate bold ideas into unforgettable digital realities.
             </p>
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-zinc-900/80 border border-white/10 text-xs font-mono text-zinc-300">
+              <span className="h-1.5 w-1.5 rounded-full bg-orange-500" />
+              <span>Founded & Led by U. Harsha Vardhan & Co-Founder</span>
+            </div>
           </FadeUp>
         </div>
  

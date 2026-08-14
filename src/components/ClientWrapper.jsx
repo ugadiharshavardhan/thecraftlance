@@ -15,6 +15,7 @@ import About from "@/components/sections/About";
 import Services from "@/components/sections/Services";
 import Process from "@/components/sections/Process";
 import Portfolio from "@/components/sections/Portfolio";
+import Founders from "@/components/sections/Founders";
 import Testimonials from "@/components/sections/Testimonials";
 import Contact from "@/components/sections/Contact";
 import Footer from "@/components/sections/Footer";
@@ -87,6 +88,7 @@ export default function ClientWrapper() {
               <Portfolio />
               <Services />
               <Process />
+              <Founders />
               <Testimonials />
             </main>
             <Footer />
